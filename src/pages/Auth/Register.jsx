@@ -3,6 +3,7 @@ import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import useTogglePasswordVisibility from '../../hooks/useTogglePasswordVisibility';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import useValidation from '../../hooks/useValidation';
 
 export default function Register() {
   const { showPassword, togglePasswordVisibility } = useTogglePasswordVisibility();
@@ -11,27 +12,32 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [errors, setErrors] = useState({});
 
 
   const { register } = useAuth();
   const handleRegister = async (e) => {
-      e.preventDefault();
+    e.preventDefault();
 
-      try {
-          await register({name, email, password,password_confirmation: passwordConfirmation});
-          console.log("Registration successful!");
-      } catch (error) {
-          console.error("Register error:", error);
+    try {
+      await register({ name, email, password, password_confirmation: passwordConfirmation });
+      console.log("Registration successful!");
+    } catch (error) {
+      if (error.response?.status === 422) {
+        setErrors(error.response.data.errors)
       }
+      else
+        console.log('Login error', error);
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <div className="flex w-full max-w-5xl shadow-lg rounded-lg overflow-hidden relative bg-cover bg-center" 
-           style={{ backgroundImage: "url('public/images/background1.jpg')" }}>
-        
+      <div className="flex w-full max-w-5xl shadow-lg rounded-lg overflow-hidden relative bg-cover bg-center max-h-[740px]"
+        style={{ backgroundImage: "url('public/images/background1.jpg')" }}>
+
         <div className="absolute inset-0 bg-black opacity-40"></div>
-        
+
         <div className="hidden md:block w-1/2 relative z-10">
         </div>
 
@@ -55,6 +61,7 @@ export default function Register() {
                 <input id="name" name="name" onChange={(e) => setName(e.target.value)}
                   type="text" required className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-md bg-gray-900 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="John Doe" />
               </div>
+              {useValidation(errors, "name")}
             </div>
 
             <div className="space-y-2">
@@ -68,6 +75,7 @@ export default function Register() {
                 <input id="email" name="email" onChange={(e) => setEmail(e.target.value)}
                   type="email" required className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-md bg-gray-900 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="your@email.com" />
               </div>
+              {useValidation(errors, "email")}
             </div>
 
             <div className="space-y-2">
@@ -86,6 +94,7 @@ export default function Register() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              {useValidation(errors, "password")}
             </div>
 
             <div className="space-y-2">
@@ -104,6 +113,7 @@ export default function Register() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              {useValidation(errors, "password_confirmation")}
             </div>
 
             <div>

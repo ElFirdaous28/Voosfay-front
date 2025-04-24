@@ -3,6 +3,7 @@ import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import useTogglePasswordVisibility from '../../hooks/useTogglePasswordVisibility';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import useValidation from '../../hooks/useValidation';
 
 export default function Login() {
   const { showPassword, togglePasswordVisibility } = useTogglePasswordVisibility();
@@ -23,11 +24,12 @@ export default function Login() {
         setErrors(error.response.data.errors);
       } else {
         console.error("Login error:", error);
-      }    }
+      }
+    }
   };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <div className="flex w-full max-w-5xl shadow-lg rounded-lg overflow-hidden relative bg-cover bg-center"
+      <div className="flex w-full max-w-5xl shadow-lg rounded-lg overflow-hidden relative bg-cover bg-center max-h-[740px]"
         style={{ backgroundImage: "url('public/images/background1.jpg')" }}>
 
         <div className="absolute inset-0 bg-black opacity-40"></div>
@@ -36,7 +38,7 @@ export default function Login() {
           <div className="text-center">
             <h1 className="text-2xl font-bold text-white">Login</h1>
             <p className="mt-2 text-gray-400">
-              Create an account to get started.
+              Welcome back! Please enter your details.
             </p>
           </div>
 
@@ -52,6 +54,7 @@ export default function Login() {
                 <input id="email" name="email" onChange={(e) => setEmail(e.target.value)}
                   type="email" required className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-md bg-gray-900 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="your@email.com" />
               </div>
+              {useValidation(errors, "email")}
             </div>
 
             <div className="space-y-2">
@@ -70,6 +73,7 @@ export default function Login() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              {useValidation(errors, "password")}
             </div>
 
             <div>
@@ -77,43 +81,45 @@ export default function Login() {
                 onClick={handleLogin}
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Create account
+                Sign in
               </button>
             </div>
           </form>
 
-          <div className="text-center">
-            <p className="text-sm text-gray-400">
-              Already have an account?{" "}
-              <Link to="/register" className="font-medium text-blue-500 hover:text-blue-400">
-                Sign up
-              </Link>
-            </p>
-          </div>
+          <div className="mt-4 text-center">
+          <p className="text-sm text-gray-400">
+            Don't have an account?{" "}
+            <Link to="/register" className="font-medium text-blue-500 hover:text-blue-400">
+              Sign up
+            </Link>
+          </p>
+        </div>
 
-          <div>
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-700"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gray-800 text-gray-400">Or continue with</span>
-              </div>
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-700"></div>
             </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <div>
-                <button className="w-full flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700">
-                  Google
-                </button>
-              </div>
-              <div>
-                <button className="w-full flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700">
-                  GitHub
-                </button>
-              </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-gray-800 text-gray-400">Or continue with</span>
             </div>
           </div>
+
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <div>
+              <button
+                className="w-full flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700">
+                Google
+              </button>
+            </div>
+            <div>
+              <button
+                className="w-full flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700">
+                GitHub
+              </button>
+            </div>
+          </div>
+        </div>
         </div>
 
         <div className="hidden md:block w-1/2 relative z-10">
