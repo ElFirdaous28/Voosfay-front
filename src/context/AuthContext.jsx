@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    
     // check auth function
     useEffect(() => {
         const checkAuth = async () => {
@@ -33,8 +33,7 @@ export const AuthProvider = ({ children }) => {
 
         checkAuth();
     }, [token]);
-
-    // 
+ 
     useEffect(() => {
         if (token) {
             api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -78,6 +77,13 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
         navigate("/login");
     };
+
+    const hasRole = (requiredRoles) => {
+        if (!requiredRoles || requiredRoles.length === 0) return true;
+        if (!user?.role) return false;
+        return requiredRoles.includes(user.role);
+    };    
+
     const contextValue = useMemo(() => ({
         login,
         register,
@@ -85,7 +91,7 @@ export const AuthProvider = ({ children }) => {
         user,
         token,
         isAuthenticated,
-        // hasRole,
+        hasRole,
         loading
     }), [user, token, isAuthenticated, loading]);
 

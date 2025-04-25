@@ -30,7 +30,7 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className="flex w-full max-w-5xl shadow-lg rounded-lg overflow-hidden relative bg-cover bg-center max-h-[740px]"
-        style={{ backgroundImage: "url('public/images/background1.jpg')" }}>
+        style={{ backgroundImage: "url('images/background1.jpg')" }}>
 
         <div className="absolute inset-0 bg-black opacity-40"></div>
 
