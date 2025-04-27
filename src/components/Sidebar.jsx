@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, Car, List, Users, Star, CreditCard, Flag, LogOut, X } from "lucide-react";
+import { Home, Search, Car, List, Users, Star, CreditCard, Flag, LogOut, Settings, X } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
     const location = useLocation();
     const { user, logout } = useAuth();
+
+    console.log(user);
 
     useEffect(() => {
         if (window.innerWidth < 1024) {
@@ -17,22 +19,24 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         return location.pathname === path;
     };
 
+    // Check if user is admin
     const isAdmin = user?.role === "admin";
 
     const MenuLink = ({ to, icon: Icon, text }) => (
         <Link
             to={to}
             className={`flex items-center py-3 px-4 rounded-lg transition-colors duration-200 group ${isActive(to)
-                ? "bg-blue-600 text-white font-medium"
+                ? "bg-cyan-500 text-gray-50 font-medium"
                 : "text-gray-300 hover:bg-gray-700"
                 }`}>
-            <Icon size={20} className={`${isActive(to) ? "text-white" : "text-gray-400 group-hover:text-white"}`} />
-            <span className="ml-3">{text}</span>
+            <Icon size={20} className={`${isActive(to) ? "text-gray-50" : "text-gray-400 group-hover:text-white"}`} />
+            <span className="ml-3 text-white">{text}</span>
         </Link>
     );
 
     return (
         <>
+            {/* Overlay for mobile */}
             {isOpen && (
                 <div
                     className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
@@ -40,11 +44,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             )}
 
             <aside
-                className={`fixed top-0 left-0 z-30 h-full w-64 bg-gray-900 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
+                className={`fixed top-0 left-0 z-30 h-full w-64 bg-zinc-800 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
                     }`}>
                 <div className="flex items-center justify-between h-16 px-6 border-b border-gray-700">
                     <div className="flex items-center">
-                        <div className="h-8 w-8 bg-blue-600 rounded-md flex items-center justify-center">
+                        <div className="h-8 w-8 bg-cyan-500 rounded-md flex items-center justify-center">
                             <Car size={20} className="text-white" />
                         </div>
                         <h2 className="ml-2 text-xl font-bold text-white">RideShare</h2>
@@ -56,7 +60,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                     </button>
                 </div>
 
-                <div className="py-4 px-3 overflow-y-auto h-[calc(100%-4rem)] border-r border-gray-700 ">
+                <div className="py-4 px-3 overflow-y-auto h-[calc(100%-4rem)]">
                     <div className="space-y-1 mt-10">
                         {!isAdmin && (<div className="border-gray-700 space-y-2">
                             <MenuLink to="/search-rides" icon={Search} text="Search Rides" />
@@ -68,7 +72,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                             <MenuLink to="/reports" icon={Flag} text="Reports" />
                         </div>)}
 
-                        {/* admin links */}
+                        {/* Admin section - flattened without dropdown */}
                         {isAdmin && (
                             <div className="border-gray-700 space-y-2">
                                 <div className="space-y-1">

@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'
 import UnauthenticatedRoute from './Router/UnauthenticatedRoute'
 import PrivateRoute from './Router/PrivateRoute'
 import SearchRides from './pages/SearchRides'
+import ErrorComponent from './components/ErrorComponent'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
       <Route path='/' element={<Home />} />
       <Route path='/login' element={<UnauthenticatedRoute element={<Login />} />} />
       <Route path='/register' element={<UnauthenticatedRoute element={<Register />} />} />
+      <Route path='/505' element={<ErrorComponent />} />
 
       {/* admin routes */}
       <Route element={<PrivateRoute role={["admin"]} />}>
@@ -23,7 +25,7 @@ function App() {
 
       {/* user routes */}
       <Route element={<PrivateRoute role={["user"]} />}>
-        <Route path='/search-rides' element={<SearchRides />} />
+        <Route path='/search-rides' element={<SearchRides errorType='serverError' />} />
       </Route>
 
     </Routes>

@@ -15,7 +15,7 @@ export default function Header({ setIsSidebarOpen, title = "Dashboard" }) {
                 setShowUserDropdown(false);
             }
         }
-        
+
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
@@ -23,7 +23,7 @@ export default function Header({ setIsSidebarOpen, title = "Dashboard" }) {
     }, []);
 
     return (
-        <header className="flex justify-between items-center h-16 px-6 bg-gradient-to-r from-gray-900 to-gray-800 border-b border-gray-700 shadow-md">
+        <header className="flex justify-between items-center h-16 px-6 bg-zinc-800 border-gray-700 shadow-md">
             <div className="flex items-center">
                 <button
                     className="lg:hidden text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none"
@@ -35,17 +35,15 @@ export default function Header({ setIsSidebarOpen, title = "Dashboard" }) {
             </div>
 
             <div className="flex items-center space-x-4">
-                {/* Using the notification dropdown component */}
                 <NotificationDropdown />
 
-                {/* User Profile Button and Dropdown */}
                 <div className="relative" ref={userDropdownRef}>
                     <button
                         className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-700 transition-colors duration-200"
                         onClick={() => setShowUserDropdown(!showUserDropdown)}>
                         <div className="h-8 w-8 rounded-full overflow-hidden bg-gray-600 ring-2 ring-gray-500">
                             <img
-                                src={user?.picture ? `http://127.0.0.1:8000/storage/${user.picture}` : "/default-avatar.png"}
+                                src={user?.picture ? `http://127.0.0.1:8000/storage/${user.picture}` : "/images/default-avatar.png"}
                                 alt="User Avatar"
                                 className="w-full h-full object-cover"
                             />
