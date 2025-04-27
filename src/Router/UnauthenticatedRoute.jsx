@@ -1,15 +1,19 @@
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import Spinner from "../components/Spinner";
 
 const UnauthenticatedRoute = ({ element }) => {
-    const { isAuthenticated, loading } = useAuth();
+    const { isAuthenticated, loading, navigateToDefaultPage, user } = useAuth();
 
-    if (loading) return <Spinner />
+    useEffect(() => {
+        if (isAuthenticated && user?.role) {
+            navigateToDefaultPage(user.role);
+        }
+    }, [isAuthenticated, user, navigateToDefaultPage]);
 
-    if (isAuthenticated) {
-        return <Navigate to="/dashboard" replace />;
-    }
+    if (loading) return <Spinner />;
+
+    if (isAuthenticated) return null;
 
     return element;
 };
