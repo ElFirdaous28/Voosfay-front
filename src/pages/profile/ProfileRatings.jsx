@@ -60,13 +60,14 @@ export default function ProfileRatings() {
         if (text.length <= maxLength) return text;
         return text.substr(0, maxLength).trim();
     };
-
+    
     if (!profile) {
         return <Spinner />
     }
-
+    
     return (
         <Layout>
+            <ProfileTabs />
             {/* profile section */}
             <div className="bg-zinc-800 text-gray-100 p-8 rounded-lg mb-4">
                 <div className="flex items-center gap-4">
@@ -110,7 +111,6 @@ export default function ProfileRatings() {
             </div>
 
             <div className='bg-zinc-800 text-gray-100 rounded-lg p-8'>
-                <ProfileTabs />
                 <div className="flex">
                     <div className="w-2/5 p-4 bg-gray-800 rounded-lg">
                         <div className="mb-6">

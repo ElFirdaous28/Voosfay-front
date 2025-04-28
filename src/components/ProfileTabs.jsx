@@ -6,7 +6,7 @@ export default function ProfileTabs() {
     return (
         <>
             {/* Tabs */}
-            <div className="flexb order-b border-gray-700 mb-4 pl-4">
+            <div className="flexb order-b border-gray-700 mb-4 pl-4 p-4 bg-zinc-800 text-gray-100 rounded-lg">
                 <button
                     className={`px-4 py-2 ${activeTab === 'ratings' ? 'border-b-2 border-blue-500' : ''}`}
                     onClick={() => setActiveTab('ratings')}>

@@ -2,9 +2,10 @@ import { Menu, ChevronDown } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect, useRef } from "react";
 import NotificationDropdown from "./NotificationDropdown";
+import { Link } from "react-router-dom";
 
 export default function Header({ setIsSidebarOpen, title = "Dashboard" }) {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const [showUserDropdown, setShowUserDropdown] = useState(false);
     const userDropdownRef = useRef(null);
 
@@ -45,8 +46,7 @@ export default function Header({ setIsSidebarOpen, title = "Dashboard" }) {
                             <img
                                 src={user?.picture ? `http://127.0.0.1:8000/storage/${user.picture}` : "/images/default-avatar.png"}
                                 alt="User Avatar"
-                                className="w-full h-full object-cover"
-                            />
+                                className="w-full h-full object-cover" />
                         </div>
                         <span className="text-white text-sm font-medium hidden md:block">{user?.name || "User Name"}</span>
                         <ChevronDown size={16} className="text-gray-400 hidden md:block" />
@@ -54,10 +54,12 @@ export default function Header({ setIsSidebarOpen, title = "Dashboard" }) {
 
                     {showUserDropdown && (
                         <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-10 border border-gray-700">
-                            <a href="/profile" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Your Profile</a>
-                            <a href="/settings" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Settings</a>
-                            <div className="border-t border-gray-700 my-1"></div>
-                            <a href="/logout" className="block px-4 py-2 text-sm text-red-400 hover:bg-gray-700">Sign out</a>
+                            <Link to={`/profile/edit/${user.id}`} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md transition-all duration-200">
+                                Your Profile
+                            </Link>
+                            <button onClick={logout} className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-700 rounded-md transition-all duration-200">
+                                Sign out
+                            </button>
                         </div>
                     )}
                 </div>

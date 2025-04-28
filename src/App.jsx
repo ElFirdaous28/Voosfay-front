@@ -9,6 +9,7 @@ import PrivateRoute from './Router/PrivateRoute'
 import SearchRides from './pages/SearchRides'
 import ErrorComponent from './components/ErrorComponent'
 import ProfileRatings from './pages/profile/ProfileRatings'
+import ProfileSettings from './pages/profile/ProfileSettings'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
 
       {/* profile routes */}
       <Route path="/profile/ratings/:userId" element={<ProfileRatings />} />
+      <Route path="/profile/settings/:userId" element={<ProfileSettings />} />
 
       <Route element={<PrivateRoute role={["admin"]} />}>
         <Route path='/dashboard' element={<Dashboard />} />
