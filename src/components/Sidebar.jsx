@@ -6,9 +6,6 @@ import { useAuth } from "../context/AuthContext";
 export default function Sidebar({ isOpen, setIsOpen }) {
     const location = useLocation();
     const { user, logout } = useAuth();
-
-    console.log(user);
-
     useEffect(() => {
         if (window.innerWidth < 1024) {
             setIsOpen(false);

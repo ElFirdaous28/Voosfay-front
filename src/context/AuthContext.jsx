@@ -46,8 +46,6 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     const navigateToDefaultPage = (role) => {
-        console.log(role);
-
         if (role === 'admin') {
             navigate('/dashboard');
         } else if (role === 'user') {
@@ -101,6 +99,8 @@ export const AuthProvider = ({ children }) => {
             let userData;
             if (!response.data.user) {
                 const { data } = await api.get('v1/user');
+                console.log(userData);
+
                 userData = data;
                 setUser(userData);
             } else {

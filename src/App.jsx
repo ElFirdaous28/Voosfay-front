@@ -8,6 +8,7 @@ import UnauthenticatedRoute from './Router/UnauthenticatedRoute'
 import PrivateRoute from './Router/PrivateRoute'
 import SearchRides from './pages/SearchRides'
 import ErrorComponent from './components/ErrorComponent'
+import ProfileRatings from './pages/profile/ProfileRatings'
 
 function App() {
 
@@ -18,10 +19,13 @@ function App() {
       <Route path='/register' element={<UnauthenticatedRoute element={<Register />} />} />
       <Route path='/505' element={<ErrorComponent />} />
 
-      {/* admin routes */}
+      {/* profile routes */}
+      <Route path="/profile/ratings/:userId" element={<ProfileRatings />} />
+
       <Route element={<PrivateRoute role={["admin"]} />}>
         <Route path='/dashboard' element={<Dashboard />} />
       </Route>
+
 
       {/* user routes */}
       <Route element={<PrivateRoute role={["user"]} />}>
