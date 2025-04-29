@@ -34,7 +34,7 @@ function App() {
         {/* ride routes */}
         <Route path='rides' element={<SearchRides />} />
         <Route path='ride-details/:id' element={<RideDetails />} />
-        <Route path='add-ride' element={<AddRide />} />
+        <Route path='offer-ride' element={<AddRide />} />
         <Route path='edit-ride/:id' element={<EditRide />} />
 
         <Route element={<PrivateRoute role={["admin"]} />}>

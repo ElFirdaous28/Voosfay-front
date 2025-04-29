@@ -75,7 +75,6 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                                 <div className="space-y-1">
                                     <MenuLink to="/dashboard" icon={Home} text="Dashboard" />
                                     <MenuLink to="/admin/users" icon={Users} text="Users" />
-                                    <MenuLink to="/admin/rides" icon={Car} text="Rides" />
                                     <MenuLink to="/admin/reports" icon={Flag} text="Reports" />
                                     <MenuLink to="/admin/payments" icon={CreditCard} text="Payments" />
                                 </div>
