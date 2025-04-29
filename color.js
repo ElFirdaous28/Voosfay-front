@@ -4,5 +4,6 @@ const colors = [{
     'light-gray': '#f7fafa',//gray-100
     'mid-blue': '#00a0b0',//cyan-600
     'light-blue': '#00d2e6',//cyan-400
+    'blue': '#007AFF',//vlue-600
     'dark-blue': '#005e66'//teal-800
 }]

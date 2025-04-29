@@ -6,10 +6,11 @@ import Register from './pages/Auth/Register'
 import Dashboard from './pages/Dashboard'
 import UnauthenticatedRoute from './Router/UnauthenticatedRoute'
 import PrivateRoute from './Router/PrivateRoute'
-import SearchRides from './pages/SearchRides'
 import ErrorComponent from './components/ErrorComponent'
 import ProfileRatings from './pages/profile/ProfileRatings'
 import ProfileSettings from './pages/profile/ProfileSettings'
+import SearchRides from './pages/Rides/SearchRides'
+import SearchRidesTest from './pages/Rides/SearchRidesTest'
 
 function App() {
 
@@ -23,6 +24,10 @@ function App() {
       {/* profile routes */}
       <Route path="/profile/ratings/:userId" element={<ProfileRatings />} />
       <Route path="/profile/settings/:userId" element={<ProfileSettings />} />
+
+      {/* ride routes */}
+      <Route path='rides' element={<SearchRides />} />
+      <Route path='rides/test' element={<SearchRidesTest />} />
 
       <Route element={<PrivateRoute role={["admin"]} />}>
         <Route path='/dashboard' element={<Dashboard />} />
