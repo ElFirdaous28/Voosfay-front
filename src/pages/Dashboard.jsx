@@ -14,95 +14,33 @@ import {
     Star
 } from 'lucide-react';
 import Layout from './Layout';
+import Spinner from '../components/Spinner';
+import api from '../services/api';
 
 export default function Dashboard() {
     const [stats, setStats] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const mockData = {
-            "success": true,
-            "data": {
-                "users": {
-                    "total": 7,
-                    "new_this_month": 7,
-                    "top_rated": [
-                        {
-                            "id": 3,
-                            "name": "Uriah Herman",
-                            "picture": null,
-                            "reviews_given_avg_rating": null
-                        },
-                        {
-                            "id": 7,
-                            "name": "Uesr1",
-                            "picture": null,
-                            "reviews_given_avg_rating": null
-                        },
-                        {
-                            "id": 6,
-                            "name": "Sabina King IV",
-                            "picture": "https://via.placeholder.com/640x480.png/00dd11?text=earum",
-                            "reviews_given_avg_rating": 3.53
-                        },
-                        {
-                            "id": 5,
-                            "name": "Mr. Abdul Rempel Sr.",
-                            "picture": "https://via.placeholder.com/640x480.png/003355?text=nemo",
-                            "reviews_given_avg_rating": 3.5
-                        },
-                        {
-                            "id": 1,
-                            "name": "admin admin",
-                            "picture": "",
-                            "reviews_given_avg_rating": 3.4
-                        }
-                    ]
-                },
-                "rides": {
-                    "total": 63,
-                    "this_week": 63,
-                    "total_reservations": 35,
-                    "pending": 0,
-                    "completed": 10,
-                    "canceled": 0
-                },
-                "reports": {
-                    "total": 3,
-                    "resolved": 2
-                },
-                "payments": {
-                    "total_received": "1285.42",
-                    "this_month": "1285.42"
-                }
+        const fetchRide = async () => {
+            try {
+                const response = await api.get(`/v1/statistics`);
+                setStats(response.data.data);
+                console.log(response.data.data);
+            } catch (error) {
+                console.error('Error fetching ride details', error);
+            } finally {
+                setIsLoading(false);
             }
         };
-
-        setTimeout(() => {
-            setStats(mockData.data);
-            setIsLoading(false);
-        }, 800); // Simulate network delay
+        fetchRide();
     }, []);
 
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center h-64">
-                <div className="animate-pulse flex flex-col items-center">
-                    <div className="w-16 h-16 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin"></div>
-                    <p className="mt-4 text-gray-400">Loading statistics...</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="bg-red-900/20 border border-red-800 p-4 rounded-lg text-center">
-                <AlertTriangle size={40} className="text-red-500 mx-auto mb-2" />
-                <h3 className="text-red-200 text-lg font-semibold">Failed to load statistics</h3>
-                <p className="text-red-300">{error}</p>
-            </div>
+            <Layout>
+                <Spinner />
+            </Layout>
         );
     }
 
@@ -137,9 +75,9 @@ export default function Dashboard() {
                         </div>
                     </div>
                     <div className="mt-4 flex items-center text-sm">
-                        <Calendar size={16} className="text-cyan-400 mr-1" />
-                        <span className="text-cyan-400 font-medium">{stats.rides.this_week}</span>
-                        <span className="text-gray-400 ml-1">this week</span>
+                        <Calendar size={16} className="text-green-400 mr-1" />
+                        <span className="text-gray-400 font-medium">{stats.rides.this_month}</span>
+                        <span className="text-gray-400 ml-1">this month</span>
                     </div>
                 </div>
 
@@ -256,17 +194,10 @@ export default function Dashboard() {
                                         <td className="py-3 pl-1">
                                             <div className="flex items-center">
                                                 <div className="w-10 h-10 rounded-full bg-zinc-700 overflow-hidden mr-3 flex-shrink-0">
-                                                    {user.picture ? (
-                                                        <img
-                                                            src="/api/placeholder/100/100"
-                                                            alt={user.name}
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center bg-cyan-800 text-white text-lg font-bold">
-                                                            {user.name.charAt(0)}
-                                                        </div>
-                                                    )}
+                                                    <img
+                                                        src={user?.picture ? `http://127.0.0.1:8000/storage/${user.picture}` : "/images/default-avatar.png"}
+                                                        alt="User Avatar"
+                                                        className="w-full h-full object-cover" />
                                                 </div>
                                                 <div>
                                                     <p className="text-white font-medium">{user.name}</p>
