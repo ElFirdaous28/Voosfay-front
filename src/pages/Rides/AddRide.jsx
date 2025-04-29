@@ -38,9 +38,7 @@ export default function AddRide() {
         setIsSubmitting(true);
         setErrors('');
 
-        try {
-            console.log(formData);
-            
+        try {            
             const response = await api.post('v1/rides', formData);
             toast.success("Ride successfully created!");
             navigate(`/ride-details/${response.data.ride.id}`);
