@@ -9,22 +9,22 @@ export default function ErrorComponent({ errorType }) {
     switch (errorType) {
         case 'notFound':
             message = 'Oops! The page you are looking for does not exist.';
-            image = '/images/not-found.png'; // URL path
+            image = '/images/not-found.png';
             errorCode = '404';
             break;
         case 'unauthorized':
             message = 'You are not authorized to access this page.';
-            image = '/images/unauthorized.png'; // URL path
+            image = '/images/unauthorized.png';
             errorCode = '401';
             break;
         case 'serverError':
             message = 'Something went wrong on our side. Please try again later.';
-            image = '/images/server-error.png'; // URL path
+            image = '/images/server-error.png';
             errorCode = '500';
             break;
         default:
             message = 'An unknown error occurred.';
-            image = '/images/not-found.png'; // fallback
+            image = '/images/not-found.png';
             errorCode = 'Unknown';
     }
 

@@ -10,36 +10,43 @@ import ErrorComponent from './components/ErrorComponent'
 import ProfileRatings from './pages/profile/ProfileRatings'
 import ProfileSettings from './pages/profile/ProfileSettings'
 import SearchRides from './pages/Rides/SearchRides'
-import SearchRidesTest from './pages/Rides/SearchRidesTest'
+import RideDetails from './pages/Rides/RideDetails'
+import AddRide from './pages/Rides/AddRide'
+import NotificationProvider from './components/NotificationProvider'
 
 function App() {
 
   return (
-    <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/login' element={<UnauthenticatedRoute element={<Login />} />} />
-      <Route path='/register' element={<UnauthenticatedRoute element={<Register />} />} />
-      <Route path='/505' element={<ErrorComponent />} />
+    <>
+      <NotificationProvider />
 
-      {/* profile routes */}
-      <Route path="/profile/ratings/:userId" element={<ProfileRatings />} />
-      <Route path="/profile/settings/:userId" element={<ProfileSettings />} />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<UnauthenticatedRoute element={<Login />} />} />
+        <Route path='/register' element={<UnauthenticatedRoute element={<Register />} />} />
+        <Route path='/505' element={<ErrorComponent />} />
 
-      {/* ride routes */}
-      <Route path='rides' element={<SearchRides />} />
-      <Route path='rides/test' element={<SearchRidesTest />} />
+        {/* profile routes */}
+        <Route path="/profile/ratings/:userId" element={<ProfileRatings />} />
+        <Route path="/profile/settings/:userId" element={<ProfileSettings />} />
 
-      <Route element={<PrivateRoute role={["admin"]} />}>
-        <Route path='/dashboard' element={<Dashboard />} />
-      </Route>
+        {/* ride routes */}
+        <Route path='rides' element={<SearchRides />} />
+        <Route path='ride-details/:id' element={<RideDetails />} />
+        <Route path='add-ride' element={<AddRide />} />
+
+        <Route element={<PrivateRoute role={["admin"]} />}>
+          <Route path='/dashboard' element={<Dashboard />} />
+        </Route>
 
 
-      {/* user routes */}
-      <Route element={<PrivateRoute role={["user"]} />}>
-        <Route path='/search-rides' element={<SearchRides errorType='serverError' />} />
-      </Route>
+        {/* user routes */}
+        <Route element={<PrivateRoute role={["user"]} />}>
+          <Route path='/search-rides' element={<SearchRides errorType='serverError' />} />
+        </Route>
 
-    </Routes>
+      </Routes>
+    </>
   )
 }
 

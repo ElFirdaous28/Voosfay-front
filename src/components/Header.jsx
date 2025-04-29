@@ -54,7 +54,7 @@ export default function Header({ setIsSidebarOpen, title = "Dashboard" }) {
 
                     {showUserDropdown && (
                         <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-10 border border-gray-700">
-                            <Link to={`/profile/edit/${user.id}`} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md transition-all duration-200">
+                            <Link to={`/profile/settings/${user.id}`} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md transition-all duration-200">
                                 Your Profile
                             </Link>
                             <button onClick={logout} className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-700 rounded-md transition-all duration-200">

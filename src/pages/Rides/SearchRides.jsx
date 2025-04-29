@@ -48,8 +48,7 @@ export default function SearchRides() {
             };
 
             const response = await api.get('v1/search/rides', { params });
-            console.log(response.data.rides);
-            
+
             const newRides = response.data.rides || [];
 
             setRides(prevRides => reset ? newRides : [...prevRides, ...newRides]);
@@ -272,7 +271,7 @@ export default function SearchRides() {
                                                         <span className="text-xs">Luggage space</span>
                                                     </div>
                                                 )}
-                                                <Link className='text-cyan-400 text-sm'>See details</Link>
+                                                <Link to={`/ride-details/${ride.id}`} className='text-cyan-400 text-sm'>See details</Link>
                                             </div>
                                         </div>
                                     </div>

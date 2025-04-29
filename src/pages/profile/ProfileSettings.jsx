@@ -44,11 +44,13 @@ export default function ProfileSettings() {
         try {
             const response = await api.get('v1/vehicle');
             const vehicle = response.data.vehicle;
-            setVehicleInfo({
-                vehicle_info: vehicle.vehicle_info || '',
-                vehicle_color: vehicle.vehicle_color || '',
-                vehicle_plate: vehicle.vehicle_plate || '',
-            });
+            if (vehicle) {
+                setVehicleInfo({
+                    vehicle_info: vehicle.vehicle_info || '',
+                    vehicle_color: vehicle.vehicle_color || '',
+                    vehicle_plate: vehicle.vehicle_plate || '',
+                });
+            }
 
         } catch (error) {
             if (error.response?.status === 422) {
