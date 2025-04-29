@@ -13,6 +13,7 @@ import SearchRides from './pages/Rides/SearchRides'
 import RideDetails from './pages/Rides/RideDetails'
 import AddRide from './pages/Rides/AddRide'
 import NotificationProvider from './components/NotificationProvider'
+import EditRide from './pages/Rides/EditRide'
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
         <Route path='rides' element={<SearchRides />} />
         <Route path='ride-details/:id' element={<RideDetails />} />
         <Route path='add-ride' element={<AddRide />} />
+        <Route path='edit-ride/:id' element={<EditRide />} />
 
         <Route element={<PrivateRoute role={["admin"]} />}>
           <Route path='/dashboard' element={<Dashboard />} />

@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import Layout from '../Layout';
-import { MapPin, Users, Calendar, Clock, Luggage, Music2, MessageSquare, Utensils, PawPrint, Plus, X, AlertCircle, Banknote } from 'lucide-react';
+import { MapPin, Users, Calendar, Clock, Luggage, Music2, MessageSquare, Utensils, PawPrint, Save, X, AlertCircle, Loader, Edit } from 'lucide-react';
 import api from '../../services/api';
-import useValidation from '../../hooks/useValidation';
 import { toast } from 'react-toastify';
+import useValidation from '../../hooks/useValidation';
 
-export default function AddRide() {
-    const navigate = useNavigate();
+
+export default function EditRide() {
+    const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState('');
     const [formData, setFormData] = useState({
@@ -25,6 +27,22 @@ export default function AddRide() {
         food_allowed: false
     });
 
+    useEffect(() => {
+        const fetchRide = async () => {
+            try {
+                const response = await api.get(`/v1/rides/${id}`);
+                setFormData(response.data.ride)
+            } catch (err) {
+                console.error('Error fetching ride details', err);
+                setErrors('Failed to load ride details. Please try again.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchRide();
+    }, [id]);
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
@@ -39,32 +57,44 @@ export default function AddRide() {
         setErrors('');
 
         try {
-            console.log(formData);
-            
-            const response = await api.post('v1/rides', formData);
-            toast.success("Ride successfully created!");
-            navigate(`/ride-details/${response.data.ride.id}`);
+            await api.put(`/v1/rides/${id}`, formData);
+            toast.success("Ride successfully updated!");
         } catch (error) {
-            toast.error("Failed to create ride. Please try again.");
+            // console.error('Error updating ride', error);
+            toast.error("Failed to update ride. Please try again.");
             setErrors(error.response?.data?.errors || { general: ["An error occurred."] });
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    if (isLoading) {
+        return (
+            <Layout>
+                <div className="flex justify-center items-center h-64">
+                    <div className="animate-pulse flex flex-col items-center">
+                        <div className="w-16 h-16 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin"></div>
+                        <p className="mt-4 text-gray-400">Loading ride details...</p>
+                    </div>
+                </div>
+            </Layout>
+        );
+    }
 
     return (
         <Layout>
             <div className="max-w-4xl mx-auto p-4">
                 <div className="bg-gradient-to-b from-zinc-800 to-zinc-900 rounded-xl shadow-xl overflow-hidden">
+                    {/* Header */}
                     <div className="bg-green-700 p-6">
                         <h2 className="text-2xl font-bold text-white flex items-center">
-                            <Plus size={24} className="mr-2" />
-                            Add New Ride
+                            <Edit size={24} className="mr-2" />
+                            Edit Ride
                         </h2>
                     </div>
 
                     <form onSubmit={handleSubmit} className="p-6">
+
                         <div className="mb-8">
                             <h3 className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Route Details</h3>
 
@@ -80,10 +110,10 @@ export default function AddRide() {
                                         value={formData.start_location}
                                         onChange={handleChange}
                                         className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none"
-                                        placeholder="City, address or landmark" />
+                                        placeholder="City, address or landmark"
+                                        required />
                                     <div>{useValidation(errors, "start_location")}</div>
                                 </div>
-
                                 <div>
                                     <label className="text-gray-300 mb-2 flex items-center">
                                         <MapPin size={16} className="mr-2 text-cyan-400" />
@@ -95,16 +125,17 @@ export default function AddRide() {
                                         value={formData.ending_location}
                                         onChange={handleChange}
                                         className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none"
-                                        placeholder="City, address or landmark" />
+                                        placeholder="City, address or landmark"
+                                        required />
                                     <div>{useValidation(errors, "ending_location")}</div>
                                 </div>
                             </div>
                         </div>
-
+                        {/* date and time */}
                         <div className="mb-8">
                             <h3 className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Schedule</h3>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                                 <div>
                                     <label className="text-gray-300 mb-2 flex items-center">
                                         <Clock size={16} className="mr-2 text-cyan-400" />
@@ -118,7 +149,6 @@ export default function AddRide() {
                                         className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none" />
                                     <div>{useValidation(errors, "start_time")}</div>
                                 </div>
-
                                 <div>
                                     <label className="text-gray-300 mb-2 flex items-center">
                                         <Clock size={16} className="mr-2 text-cyan-400" />
@@ -129,7 +159,8 @@ export default function AddRide() {
                                         name="ending_time"
                                         value={formData.ending_time}
                                         onChange={handleChange}
-                                        className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none" />
+                                        className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none"
+                                        required />
                                     <div>{useValidation(errors, "ending_time")}</div>
                                 </div>
                             </div>
@@ -150,33 +181,30 @@ export default function AddRide() {
                                     onChange={handleChange}
                                     min="1"
                                     max="10"
-                                    className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none" />
+                                    className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none"
+                                    required />
                                 <div>{useValidation(errors, "available_seats")}</div>
                             </div>
                         </div>
 
-                        <div className="mb-8">
-                            <div className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Pricing</div>
-
-                            <div className="mb-4">
-                                <label className="text-gray-300 mb-2 flex items-center">
-                                    <Banknote size={16} className="mr-2 text-cyan-400" />
-                                    Price
-                                </label>
-                                <input
-                                    type="number"
-                                    name="price"
-                                    value={formData.price}
-                                    onChange={handleChange}
-                                    min="0.01"
-                                    step="0.01"
-                                    className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none"
-                                    placeholder="Enter price" />
-                                <div>{useValidation(errors, "price")}</div>
-                            </div>
+                        <div className="mb-4">
+                            <label className="text-gray-300 mb-2 flex items-center">
+                                <span className="mr-2 text-cyan-400">€</span>
+                                Price
+                            </label>
+                            <input
+                                type="number"
+                                name="price"
+                                value={formData.price}
+                                onChange={handleChange}
+                                min="0"
+                                step="0.01"
+                                className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none"
+                                required />
+                            <div>{useValidation(errors, "price")}</div>
                         </div>
 
-                        {/* conditions */}
+                        {/* Preferences */}
                         <div className="mb-8">
                             <h3 className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Ride Preferences</h3>
 
@@ -254,30 +282,34 @@ export default function AddRide() {
                         </div>
 
                         {/* Submit */}
-                        <div className="flex justify-end">
-                            <button
-                                type="button"
-                                onClick={() => navigate(-1)}
-                                className="mr-4 px-6 py-3 text-gray-300 hover:text-white transition-colors"
-                                disabled={isSubmitting}>
+                        <div className="flex justify-between">
+                            <Link
+                                to={`/rides/${id}`}
+                                className="px-6 py-3 bg-zinc-700 text-gray-300 rounded-lg hover:bg-zinc-600 hover:text-white transition-colors"
+                                disabled={isSubmitting}
+                            >
                                 Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                className=" min-w-36 bg-gradient-to-r from-cyan-600 to-cyan-500 text-white px-6 py-3 rounded-lg hover:from-cyan-500 hover:to-cyan-400 transition-all shadow-lg font-medium flex items-center"
-                                disabled={isSubmitting}>
-                                {isSubmitting ? (
-                                    <>
-                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                        Submitting...
-                                    </>
-                                ) : (
-                                    <>
-                                        <Plus size={18} className="mr-2" />
-                                        Add Ride
-                                    </>
-                                )}
-                            </button>
+                            </Link>
+
+                            <div className="flex">
+                                <button
+                                    type="submit"
+                                    className="min-w-36 bg-gradient-to-r from-cyan-600 to-cyan-500 text-white px-3 py-3 rounded-lg hover:from-cyan-500 hover:to-cyan-400 transition-all shadow-lg font-medium flex items-center"
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                                            Updating...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Save size={18} className="mr-2" />
+                                            Save Changes
+                                        </>
+                                    )}
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>

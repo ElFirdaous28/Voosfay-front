@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, Car, List, Users, Star, CreditCard, Flag, LogOut, Settings, X } from "lucide-react";
+import { Home, Search, Car, Users, Star, CreditCard, Flag, LogOut, X, CarFront } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
@@ -62,8 +62,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                         {!isAdmin && (<div className="border-gray-700 space-y-2">
                             <MenuLink to="/search-rides" icon={Search} text="Search Rides" />
                             <MenuLink to="/offer-ride" icon={Car} text="Offer a Ride" />
-                            <MenuLink to="/my-offered-rides" icon={List} text="My Offered Rides" />
-                            <MenuLink to="/my-joined-rides" icon={List} text="My Joined Rides" />
+                            <MenuLink to="/offered-rides" icon={CarFront} text="Offered Rides" />
+                            <MenuLink to="/joined-rides" icon={Users} text="Joined Rides" />
                             <MenuLink to="/ratings" icon={Star} text="Ratings & Reviews" />
                             <MenuLink to="/payments" icon={CreditCard} text="Payments" />
                             <MenuLink to="/reports" icon={Flag} text="Reports" />
