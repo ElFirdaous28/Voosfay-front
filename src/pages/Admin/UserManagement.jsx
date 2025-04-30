@@ -4,10 +4,10 @@ import { Search, Ban, Trash2, UserCheck, Clock, UserSearch } from 'lucide-react'
 import api from '../../Services/api';
 import { format } from 'date-fns';
 import { useConfirmation } from '../../context/ConfirmationDialogContext';
-import { userService } from '../../Services/userService';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/Spinner';
 import { Link } from 'react-router-dom';
+import handleAction from '../../Services/handleAction';
 
 export default function UserManagement() {
     const [users, setUsers] = useState([]);
@@ -19,79 +19,16 @@ export default function UserManagement() {
     const fetchUsers = async () => {
         try {
             const response = await api.get('v1/admin/users');
-            console.log(response.data.users);
-            setUsers(response.data.users)
+            setUsers(response.data.users);
             setLoading(false);
         } catch (error) {
             console.log("error fetching users", error);
         }
-    }
-    useEffect(() => {
-        fetchUsers();
-    }, [])
-
-    const handleDelete = (userId) => {
-        openDialog({
-            title: 'Delete user',
-            message: 'Are you sure you want to delete this user?',
-            actionType: 'delete',
-            confirmText: 'Delete'
-        }, async () => {
-            const success = await userService.delete(userId);
-            if (success) {
-                toast.success('User deleted');
-                fetchUsers();
-            }
-            else toast.error('Failed to delete user');
-        });
     };
 
-    const handelBan = (userId) => {
-        openDialog({
-            title: 'Ban user',
-            message: 'Are you sure you want to ban this user?',
-            actionType: 'ban',
-            confirmText: 'Ban'
-        }, async () => {
-            const success = await userService.changeStatus(userId, { 'status': 'banned' });
-            if (success) {
-                toast.success('User Baned');
-                fetchUsers();
-            }
-            else toast.error('Failed to ban user');
-        });
-    }
-    const handelActivate = (userId) => {
-        openDialog({
-            title: 'Activate user',
-            message: 'Are you sure you want to activate this user?',
-            actionType: 'activate',
-            confirmText: 'Activate'
-        }, async () => {
-            const success = await userService.changeStatus(userId, { 'status': 'active' });
-            if (success) {
-                toast.success('User Activated');
-                fetchUsers();
-            }
-            else toast.error('Failed to activate user');
-        });
-    }
-
-    const handelSuspend = (userId) => {
-        openDialog({
-            title: 'Suspend user',
-            message: 'Are you sure you want to suspend this user?',
-            actionType: 'suspend',
-            confirmText: 'Suspend'
-        }, async () => {
-            const success = await userService.changeStatus(userId, { 'status': 'suspended', 'suspend_duration': suspendDuration });
-            if (success) {
-                toast.success('User Activated');
-                fetchUsers();
-            }
-            else toast.error('Failed to activate user');
-        });
-    }
+    useEffect(() => {
+        fetchUsers();
+    }, []);
 
     const getStatusBadgeColor = (status) => {
         switch (status) {
@@ -99,13 +36,14 @@ export default function UserManagement() {
                 return 'bg-green-100 text-green-800';
             case 'suspended':
                 return 'bg-yellow-100 text-yellow-800';
-            case 'baned':
+            case 'banned':
                 return 'bg-red-100 text-red-800';
             default:
                 return 'bg-gray-100 text-gray-800';
         }
     };
-    if (loading) return (<Layout><Spinner /></Layout>)
+
+    if (loading) return (<Layout><Spinner /></Layout>);
 
     return (
         <Layout title="User Management">
@@ -187,7 +125,7 @@ export default function UserManagement() {
 
                                             {['suspended', 'banned'].includes(user.status) && (
                                                 <button
-                                                    onClick={() => handelActivate(user.id)}
+                                                    onClick={() => handleAction('activate', user.id, suspendDuration, openDialog, fetchUsers)}
                                                     className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 cursor-pointer"
                                                     title="Activate User">
                                                     <UserCheck size={18} />
@@ -196,7 +134,7 @@ export default function UserManagement() {
 
                                             {user.status === 'active' && (
                                                 <button
-                                                    onClick={() => handelSuspend(user.id)}
+                                                    onClick={() => handleAction('suspend', user.id, suspendDuration, openDialog, fetchUsers)}
                                                     className="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 cursor-pointer"
                                                     title="Suspend User">
                                                     <Clock size={18} />
@@ -205,7 +143,7 @@ export default function UserManagement() {
 
                                             {user.status !== 'banned' && (
                                                 <button
-                                                    onClick={() => handelBan(user.id)}
+                                                    onClick={() => handleAction('ban', user.id, suspendDuration, openDialog, fetchUsers)}
                                                     className="text-rose-600 hover:text-rose-900 dark:text-rose-400 dark:hover:text-rose-300 cursor-pointer"
                                                     title="Ban User">
                                                     <Ban size={18} />
@@ -213,8 +151,8 @@ export default function UserManagement() {
                                             )}
 
                                             <button
-                                                onClick={() => handleDelete(user.id)}
-                                                className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 cursor-pointer"
+                                                onClick={() => handleAction('delete', user.id, suspendDuration, openDialog, fetchUsers)}
+                                                className="text-rose-600 hover:text-rose-900 dark:text-rose-400 dark:hover:text-rose-300 cursor-pointer"
                                                 title="Delete User">
                                                 <Trash2 size={18} />
                                             </button>

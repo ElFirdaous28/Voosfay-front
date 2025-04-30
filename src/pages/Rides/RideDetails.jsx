@@ -16,7 +16,7 @@ export default function RideDetails() {
                 const response = await api.get(`/v1/rides/${id}`);
                 setRide(response.data.ride);
                 console.log(response.data.ride);
-                
+
             } catch (err) {
                 console.error('Error fetching ride details', err);
             } finally {
@@ -26,13 +26,7 @@ export default function RideDetails() {
         fetchRide();
     }, [id]);
 
-    if (isLoading) {
-        return (
-            <Layout>
-                <Spinner />
-            </Layout>
-        );
-    }
+    if (isLoading) return (<Layout><Spinner /></Layout>);
 
     if (!ride) {
         return (

@@ -32,7 +32,6 @@ export default function ProfileRatings() {
         async function getReviews() {
             try {
                 const response = await api.get(`v1/user/reviews/${userId}`)
-                console.log(response.data);
                 setReviews(response.data);
                 setExpandedReviews({});
             } catch (error) {
@@ -60,11 +59,11 @@ export default function ProfileRatings() {
         if (text.length <= maxLength) return text;
         return text.substr(0, maxLength).trim();
     };
-    
+
     if (!profile) {
-        return <Spinner />
+        return (<Layout><Spinner /></Layout>)
     }
-    
+
     return (
         <Layout>
             <ProfileTabs />

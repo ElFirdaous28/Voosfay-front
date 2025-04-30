@@ -5,6 +5,7 @@ import { MapPin, Users, Calendar, Clock, Luggage, Music2, MessageSquare, Utensil
 import api from '../../Services/api';
 import { toast } from 'react-toastify';
 import useValidation from '../../hooks/useValidation';
+import Spinner from '../../components/Spinner';
 
 
 export default function EditRide() {
@@ -69,16 +70,7 @@ export default function EditRide() {
     };
 
     if (isLoading) {
-        return (
-            <Layout>
-                <div className="flex justify-center items-center h-64">
-                    <div className="animate-pulse flex flex-col items-center">
-                        <div className="w-16 h-16 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin"></div>
-                        <p className="mt-4 text-gray-400">Loading ride details...</p>
-                    </div>
-                </div>
-            </Layout>
-        );
+        return (<Layout><Spinner /></Layout>);
     }
 
     return (
