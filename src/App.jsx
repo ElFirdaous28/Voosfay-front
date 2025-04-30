@@ -14,6 +14,8 @@ import RideDetails from './pages/Rides/RideDetails'
 import AddRide from './pages/Rides/AddRide'
 import NotificationProvider from './components/NotificationProvider'
 import EditRide from './pages/Rides/EditRide'
+import UserManagement from './pages/Admin/UserManagement'
+import AddAdmin from './pages/Admin/AddAdmin'
 
 function App() {
 
@@ -37,8 +39,10 @@ function App() {
         <Route path='offer-ride' element={<AddRide />} />
         <Route path='edit-ride/:id' element={<EditRide />} />
 
-        <Route element={<PrivateRoute role={["admin"]} />}>
+        <Route element={<PrivateRoute role={["admin","super_admin"]} />}>
           <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='admin/users' element={<UserManagement />} />
+          <Route path='admin/add-admin' element={<AddAdmin />} />
         </Route>
 
 

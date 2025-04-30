@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, Car, Users, Star, CreditCard, Flag, LogOut, X, CarFront } from "lucide-react";
+import { Home, Search, Car, Users, Star, CreditCard, Flag, LogOut, X, CarFront, ShieldUser } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
@@ -17,7 +17,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     };
 
     // Check if user is admin
-    const isAdmin = user?.role === "admin";
+    const isAdmin = user?.role === "admin"||"super_admin";
 
     const MenuLink = ({ to, icon: Icon, text }) => (
         <Link
@@ -74,6 +74,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                             <div className="border-gray-700 space-y-2">
                                 <div className="space-y-1">
                                     <MenuLink to="/dashboard" icon={Home} text="Dashboard" />
+                                    <MenuLink to="/admin/add-admin" icon={ShieldUser} text="Add Admin" />
                                     <MenuLink to="/admin/users" icon={Users} text="Users" />
                                     <MenuLink to="/admin/reports" icon={Flag} text="Reports" />
                                     <MenuLink to="/admin/payments" icon={CreditCard} text="Payments" />
