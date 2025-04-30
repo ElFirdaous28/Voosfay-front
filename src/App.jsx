@@ -39,10 +39,11 @@ function App() {
         <Route path='offer-ride' element={<AddRide />} />
         <Route path='edit-ride/:id' element={<EditRide />} />
 
-        <Route element={<PrivateRoute role={["admin","super_admin"]} />}>
+        <Route element={<PrivateRoute role={["admin", "super_admin"]} />}>
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='admin/users' element={<UserManagement />} />
           <Route path='admin/add-admin' element={<AddAdmin />} />
+
         </Route>
 
 

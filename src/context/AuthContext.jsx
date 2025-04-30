@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../services/api";
+import api from "../Services/api";
 
 export const AuthContext = createContext();
 
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     const navigateToDefaultPage = (role) => {
-        if (role === 'admin') {
+        if (role === 'admin'||role === 'super_admin') {
             navigate('/dashboard');
         } else if (role === 'user') {
             navigate('/search-rides');

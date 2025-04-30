@@ -3,7 +3,7 @@ import Layout from '../Layout'
 import { AwardIcon, Star, StarHalf } from 'lucide-react';
 import ProfileTabs from '../../components/profileTabs';
 import { useParams } from 'react-router-dom';
-import api from '../../services/api';
+import api from '../../Services/api';
 import Spinner from '../../components/Spinner';
 
 export default function ProfileRatings() {

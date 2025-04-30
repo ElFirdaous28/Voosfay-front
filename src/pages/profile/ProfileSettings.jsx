@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Layout from '../Layout';
 import { useAuth } from '../../context/AuthContext';
-import api from '../../services/api';
+import api from '../../Services/api';
 import useValidation from '../../hooks/useValidation';
 
 export default function ProfileSettings() {

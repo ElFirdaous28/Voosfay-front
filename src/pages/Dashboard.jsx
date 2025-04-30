@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import Layout from './Layout';
 import Spinner from '../components/Spinner';
-import api from '../services/api';
+import api from '../Services/api';
 
 export default function Dashboard() {
     const [stats, setStats] = useState(null);

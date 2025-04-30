@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../Layout';
 import { MapPin, Users, Calendar, Clock, Luggage, Music2, MessageSquare, Utensils, PawPrint, Plus, X, AlertCircle, Banknote } from 'lucide-react';
-import api from '../../services/api';
+import api from '../../Services/api';
 import useValidation from '../../hooks/useValidation';
 import { toast } from 'react-toastify';
 

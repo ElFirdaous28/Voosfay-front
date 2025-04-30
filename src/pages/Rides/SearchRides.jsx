@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../Layout';
 import { MapPin, Users, Calendar, Star, Luggage, Route } from 'lucide-react';
-import api from '../../services/api';
+import api from '../../Services/api';
 import { Link } from 'react-router-dom';
 
 export default function SearchRides() {

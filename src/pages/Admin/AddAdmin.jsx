@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../Layout';
 import { Plus, User, Mail, Lock } from 'lucide-react';
-import api from '../../services/api';
+import api from '../../Services/api';
 import { toast } from 'react-toastify';
 import useValidation from '../../hooks/useValidation';
 
@@ -26,9 +26,9 @@ export default function AddAdmin() {
         setErrors({});
 
         try {
-            await api.post('v1/admin/add', formData);
+            await api.post('v1/admin/users/add', formData);
             toast.success('Admin successfully added!');
-            navigate('/admin-users');
+            navigate('/admin/users');
         } catch (error) {
             toast.error('Failed to add admin. Please try again.');
             setErrors(error.response?.data?.errors || { general: ['An error occurred.'] });

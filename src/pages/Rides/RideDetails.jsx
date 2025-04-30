@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Layout from '../Layout';
 import { MapPin, Users, Calendar, Clock, Luggage, Music2, MessageSquare, Utensils, PawPrint, Check, X, ArrowRight } from 'lucide-react';
-import api from '../../services/api';
+import api from '../../Services/api';
 import Spinner from '../../components/Spinner';
 
 export default function RideDetails() {
