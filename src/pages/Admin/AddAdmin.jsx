@@ -39,8 +39,8 @@ export default function AddAdmin() {
 
     return (
         <Layout>
-            <div className="max-w-2xl mx-auto p-4">
-                <div className="bg-gradient-to-b from-zinc-800 to-zinc-900 rounded-xl shadow-xl overflow-hidden">
+            <div className="max-w-2xl min-h-[80vh] mx-auto p-4 flex items-center">
+                <div className="w-full bg-gradient-to-b from-zinc-800 to-zinc-900 rounded-xl shadow-xl overflow-hidden">
                     <div className="bg-green-700 p-6">
                         <h2 className="text-2xl font-bold text-white flex items-center">
                             <Plus size={24} className="mr-2" />
@@ -60,8 +60,7 @@ export default function AddAdmin() {
                                 value={formData.name}
                                 onChange={handleChange}
                                 className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none"
-                                placeholder="Full name"
-                            />
+                                placeholder="Full name" />
                             <div>{useValidation(errors, 'name')}</div>
                         </div>
 
@@ -76,8 +75,7 @@ export default function AddAdmin() {
                                 value={formData.email}
                                 onChange={handleChange}
                                 className="w-full p-3 bg-zinc-700 rounded-lg text-white border border-zinc-600 focus:border-cyan-500 focus:outline-none"
-                                placeholder="admin@example.com"
-                            />
+                                placeholder="admin@example.com" />
                             <div>{useValidation(errors, 'email')}</div>
                         </div>
 
@@ -91,7 +89,7 @@ export default function AddAdmin() {
                             </button>
                             <button
                                 type="submit"
-                                className="min-w-36 bg-gradient-to-r from-cyan-600 to-cyan-500 text-white px-6 py-3 rounded-lg hover:from-cyan-500 hover:to-cyan-400 transition-all shadow-lg font-medium flex items-center"
+                                className="min-w-36 bg-gradient-to-r from-cyan-600 to-cyan-500 text-white px-3 py-3 rounded-lg hover:from-cyan-500 hover:to-cyan-400 transition-all shadow-lg font-medium flex items-center"
                                 disabled={isSubmitting}>
                                 {isSubmitting ? (
                                     <>
