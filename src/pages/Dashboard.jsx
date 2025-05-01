@@ -206,14 +206,10 @@ export default function Dashboard() {
                                             </div>
                                         </td>
                                         <td className="py-3">
-                                            {user.reviews_given_avg_rating ? (
-                                                <div className="flex items-center bg-yellow-900/20 text-yellow-400 py-1 px-3 rounded-full font-medium">
-                                                    <Star size={16} className="mr-1 fill-yellow-400" />
-                                                    {user.reviews_given_avg_rating.toFixed(1)}
-                                                </div>
-                                            ) : (
-                                                <span className="text-gray-500 italic">No ratings</span>
-                                            )}
+                                            <div className="flex items-center bg-yellow-900/20 text-yellow-400 py-1 px-3 rounded-full font-medium">
+                                                <Star size={16} className="mr-1 fill-yellow-400" />
+                                                {(user.reviews_given_avg_rating ?? 0).toFixed(1)}
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

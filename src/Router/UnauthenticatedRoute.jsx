@@ -11,7 +11,6 @@ const UnauthenticatedRoute = ({ element }) => {
         }
     }, [isAuthenticated, user, navigateToDefaultPage]);
 
-    if (loading) return <Spinner />;
 
     if (isAuthenticated) return null;
 

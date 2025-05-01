@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import { userService } from './userService';
 
-const handleAction = async (actionType, userId, suspendDuration, openDialog, fetchUsers) => {
+const handleAction = async (actionType, userId, suspendDuration, openDialog, fetchData) => {
     const actionConfig = {
         delete: {
             title: 'Delete user',
@@ -11,7 +11,7 @@ const handleAction = async (actionType, userId, suspendDuration, openDialog, fet
                 const success = await userService.delete(userId);
                 if (success) {
                     toast.success('User deleted');
-                    fetchUsers();
+                    fetchData();
                 } else {
                     toast.error('Failed to delete user');
                 }
@@ -25,7 +25,7 @@ const handleAction = async (actionType, userId, suspendDuration, openDialog, fet
                 const success = await userService.changeStatus(userId, { status: 'banned' });
                 if (success) {
                     toast.success('User banned');
-                    fetchUsers();
+                    fetchData();
                 } else {
                     toast.error('Failed to ban user');
                 }
@@ -39,7 +39,7 @@ const handleAction = async (actionType, userId, suspendDuration, openDialog, fet
                 const success = await userService.changeStatus(userId, { status: 'active' });
                 if (success) {
                     toast.success('User activated');
-                    fetchUsers();
+                    fetchData();
                 } else {
                     toast.error('Failed to activate user');
                 }
@@ -53,7 +53,7 @@ const handleAction = async (actionType, userId, suspendDuration, openDialog, fet
                 const success = await userService.changeStatus(userId, { status: 'suspended', suspend_duration: suspendDuration });
                 if (success) {
                     toast.success('User suspended');
-                    fetchUsers();
+                    fetchData();
                 } else {
                     toast.error('Failed to suspend user');
                 }
