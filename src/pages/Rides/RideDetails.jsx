@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Layout from '../Layout';
-import { MapPin, Users, Calendar, Clock, Luggage, Music2, MessageSquare, Utensils, PawPrint, Check, X, ArrowRight } from 'lucide-react';
+import { MapPin, Users, Calendar, Clock, Luggage, Music2, MessageSquare, Utensils, PawPrint, Check, X, ArrowRight, CircleSlash, CalendarCheck, Loader2, BadgeCheck } from 'lucide-react';
 import api from '../../Services/api';
 import Spinner from '../../components/Spinner';
+import { toast } from 'react-toastify';
+import { useAuth } from '../../context/AuthContext';
+
 
 export default function RideDetails() {
+    const { user } = useAuth();
     const { id } = useParams();
     const [ride, setRide] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-
     useEffect(() => {
         const fetchRide = async () => {
             try {
                 const response = await api.get(`/v1/rides/${id}`);
                 setRide(response.data.ride);
                 console.log(response.data.ride);
-
             } catch (err) {
                 console.error('Error fetching ride details', err);
             } finally {
@@ -25,6 +27,31 @@ export default function RideDetails() {
         };
         fetchRide();
     }, [id]);
+    const statusColors = {
+        available: 'bg-green-600 text-white',
+        full: 'bg-yellow-600 text-white',
+        in_progress: 'bg-blue-600 text-white',
+        completed: 'bg-gray-500 text-white',
+        cancelled: 'bg-red-600 text-white',
+    };
+
+    const statusIcons = {
+        available: <BadgeCheck size={16} className="mr-2" />,
+        full: <Users size={16} className="mr-2" />,
+        in_progress: <Loader2 size={16} className="mr-2 animate-spin" />,
+        completed: <CalendarCheck size={16} className="mr-2" />,
+        cancelled: <CircleSlash size={16} className="mr-2" />,
+    };
+    const handleReserve = async (rideId) => {
+        try {
+            const response = await api.post('v1/reservation', { ride_id: rideId })
+            console.log(response.data);
+            toast.success('Ride deleted successfully');
+        } catch (error) {
+            console.log('Error while reserving', error.response.data.message);
+            toast.error(error.response.data.message);
+        }
+    }
 
     if (isLoading) return (<Layout><Spinner /></Layout>);
 
@@ -55,17 +82,21 @@ export default function RideDetails() {
                             <h2 className="text-2xl font-bold text-white">Ride Details</h2>
                             <Link
                                 to={`/profile/ratings/${ride.user_id}`}
-                                className="group flex items-center gap-3 bg-green-900/50 p-2 rounded-lg hover:bg-green-900 transition-all">
+                                className="group flex flex-col items-center transition-all">
                                 <img
                                     src={ride.user?.picture ? `http://127.0.0.1:8000/storage/${ride.user.picture}` : '/images/default-avatar.png'}
                                     alt="Driver"
                                     className="w-12 h-12 rounded-full object-cover border-2 border-cyan-400" />
 
                                 <div className="flex flex-col">
-                                    <span className="text-white font-medium">{ride.user?.name}</span>
-                                    <span className="text-xs text-cyan-200">View Profile</span>
+                                    <span className="text-white font-semibold">{ride.user?.name}</span>
                                 </div>
                             </Link>
+                        </div>
+                        <div className="mt-4 float-right">
+                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${statusColors[ride.status]}`}>
+                                {statusIcons[ride.status]} {ride.status.replace('_', ' ')}
+                            </span>
                         </div>
                     </div>
 
@@ -175,11 +206,14 @@ export default function RideDetails() {
                             className="text-gray-400 hover:text-white transition-colors">
                             Back to rides
                         </Link>
-                        <Link
-                            to={`/reserve/${ride.id}`}
-                            className="bg-gradient-to-r from-cyan-600 to-cyan-500 text-white px-6 py-3 rounded-lg hover:from-cyan-500 hover:to-cyan-400 transition-all shadow-lg font-medium">
-                            Reserve a seat
-                        </Link>
+                        {(user?.id !== ride.user_id) && (
+                            <button
+                                onClick={() => handleReserve(ride.id)}
+                                to={`/reserve/${ride.id}`}
+                                className="bg-gradient-to-r from-cyan-600 to-cyan-500 text-white px-6 py-3 rounded-lg hover:from-cyan-500 hover:to-cyan-400 transition-all shadow-lg font-medium">
+                                Reserve a seat
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
