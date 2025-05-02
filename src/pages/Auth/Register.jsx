@@ -32,7 +32,7 @@ export default function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen bg-slate-800">
       <div className="flex w-full max-w-5xl shadow-lg rounded-lg overflow-hidden relative bg-cover bg-center max-h-[740px]"
         style={{ backgroundImage: "url('images/background1.jpg')" }}>
 
