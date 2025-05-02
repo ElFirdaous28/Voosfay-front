@@ -18,6 +18,7 @@ import UserManagement from './pages/Admin/UserManagement'
 import AddAdmin from './pages/Admin/AddAdmin'
 import ReportsManagement from './pages/Admin/ReportsManagment'
 import ReportDetails from './pages/Admin/ReportDetails'
+import OfferRides from './pages/Rides/OfferRides'
 
 function App() {
 
@@ -36,10 +37,7 @@ function App() {
         <Route path="/profile/settings/:userId" element={<ProfileSettings />} />
 
         {/* ride routes */}
-        <Route path='rides' element={<SearchRides />} />
         <Route path='ride-details/:id' element={<RideDetails />} />
-        <Route path='offer-ride' element={<AddRide />} />
-        <Route path='edit-ride/:id' element={<EditRide />} />
 
         <Route element={<PrivateRoute role={["admin", "super_admin"]} />}>
           <Route path='/dashboard' element={<Dashboard />} />
@@ -53,7 +51,10 @@ function App() {
 
         {/* user routes */}
         <Route element={<PrivateRoute role={["user"]} />}>
-          <Route path='/search-rides' element={<SearchRides errorType='serverError' />} />
+          <Route path='/search-rides' element={<SearchRides />} />
+          <Route path='offered-rides' element={<OfferRides />} />
+        <Route path='offer-ride' element={<AddRide />} />
+        <Route path='edit-ride/:id' element={<EditRide />} />
         </Route>
 
       </Routes>

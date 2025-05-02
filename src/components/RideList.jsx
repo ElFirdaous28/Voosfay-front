@@ -1,14 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Users, Star, Luggage, Route } from 'lucide-react';
+import { MapPin, Users, Star, Luggage } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 
 const RideList = ({ rides, fetchRides, hasMoreRides, isLoading }) => {
+    console.log(rides);
+
+    const { user } = useAuth();
+
+    const handleDelete = async (id) => {
+        try {
+            await api.delete(`v1/rides/${id}`);
+            fetchRides();
+            toast.success('Ride deleted successfully');
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            toast.error('Failed to delete');
+        }
+    }
+
     return (
         <div className="flex-1 space-y-4">
             {rides.length > 0 ? (
                 <>
                     {rides.map((ride) => (
-                        <div key={ride.id} className="bg-zinc-800 rounded-lg overflow-hidden">
+                        <div key={ride.id} className="bg-zinc-800 rounded-lg overflow-hidden shadow-md">
                             <div className="p-4">
                                 <div className="border-b border-gray-700 text-white text-sm md:text-base">
                                     {new Date(ride.start_time).toLocaleDateString('en-US', {
@@ -59,7 +76,7 @@ const RideList = ({ rides, fetchRides, hasMoreRides, isLoading }) => {
                                             <div className="flex items-center">
                                                 <Star size={12} className="text-yellow-500 mr-1" fill="currentColor" />
                                                 <span className="text-yellow-500 text-xs">
-                                                    {parseFloat(ride.rating_average).toFixed(1)} ({ride.rating_count || 0})
+                                                    {parseFloat(ride.rating_average).toFixed(1)} ({ride.rating_count || 0} rides)
                                                 </span>
                                             </div>
                                         </Link>
@@ -78,7 +95,24 @@ const RideList = ({ rides, fetchRides, hasMoreRides, isLoading }) => {
                                                 <span className="text-xs">Luggage space</span>
                                             </div>
                                         )}
-                                        <Link to={`/ride-details/${ride.id}`} className='text-cyan-400 text-sm'>See details</Link>
+                                        <Link to={`/ride-details/${ride.id}`} className='text-cyan-400 text-sm hover:underline'>See details</Link>
+
+                                        {(ride.user_id === user.id && new Date(ride.ending_time) > new Date()) && (
+                                            <div className="flex items-center space-x-4">
+                                                <Link
+                                                    to={`/edit-ride/${ride.id}`}
+                                                    className="text-yellow-400 text-sm hover:underline"
+                                                >
+                                                    Edit
+                                                </Link>
+                                                <button
+                                                    onClick={() => handleDelete(ride.id)}
+                                                    className="text-red-500 text-sm hover:underline"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +124,8 @@ const RideList = ({ rides, fetchRides, hasMoreRides, isLoading }) => {
                             <button
                                 onClick={() => fetchRides()}
                                 disabled={isLoading}
-                                className={`px-6 py-2 rounded text-white font-medium transition-colors ${isLoading ? 'bg-blue-800 opacity-70' : 'bg-cyan-600'}`}>
+                                className={`px-6 py-2 rounded text-white font-medium transition-colors ${isLoading ? 'bg-blue-800 opacity-70' : 'bg-cyan-600 hover:bg-cyan-500'}`}
+                            >
                                 {isLoading ? 'Loading...' : 'Load More'}
                             </button>
                         </div>
