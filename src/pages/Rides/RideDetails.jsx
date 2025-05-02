@@ -7,25 +7,40 @@ import Spinner from '../../components/Spinner';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
 
-
 export default function RideDetails() {
     const { user } = useAuth();
     const { id } = useParams();
     const [ride, setRide] = useState(null);
+    const [pendingResevations, setPendingResevations] = useState(null);
+    const [acceptedResevations, setAcceptedResevations] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const fetchRide = async () => {
+        try {
+            const response = await api.get(`/v1/rides/${id}`);
+            setRide(response.data.ride);
+        } catch (err) {
+            console.error('Error fetching ride details', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const fetchRideResevations = async () => {
+        try {
+            const response = await api.get(`/v1/ride/reservations/${id}`);
+            setPendingResevations(response.data.pending);
+            setAcceptedResevations(response.data.accepted);
+            console.log(response.data);
+        } catch (err) {
+            console.error('Error fetching ride details', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchRide = async () => {
-            try {
-                const response = await api.get(`/v1/rides/${id}`);
-                setRide(response.data.ride);
-                console.log(response.data.ride);
-            } catch (err) {
-                console.error('Error fetching ride details', err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
         fetchRide();
+        fetchRideResevations();
     }, [id]);
     const statusColors = {
         available: 'bg-green-600 text-white',
@@ -50,6 +65,17 @@ export default function RideDetails() {
         } catch (error) {
             console.log('Error while reserving', error.response.data.message);
             toast.error(error.response.data.message);
+        }
+    }
+
+    const handleReservationAction = async (id, status) => {
+        try {
+            const response = await api.patch(`v1/reservations/${id}/status`, { status });
+            console.log(response.data);
+            toast.success(`Reservation ${status} successfully.`);
+        } catch (error) {
+            console.error('Error while handling reservation:', error);
+            toast.error(error?.response?.data?.message || 'Failed to update reservation status');
         }
     }
 
@@ -151,7 +177,7 @@ export default function RideDetails() {
                         <div className="mb-8">
                             <h3 className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Ride Preferences</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className={`flex items-center p-3 rounded-lg ${ride.luggage_allowed ? 'bg-green-900/20' : 'bg-red-900/10'}`}>
+                                <div className={`flex items-center p-3 rounded-lg ${ride.luggage_allowed ? 'bg-green-900/20' : ''}`}>
                                     {ride.luggage_allowed ?
                                         <Check size={18} className="text-green-400 mr-3" /> :
                                         <X size={18} className="text-red-400 mr-3" />
@@ -160,7 +186,7 @@ export default function RideDetails() {
                                     <span className="text-gray-200">Luggage</span>
                                 </div>
 
-                                <div className={`flex items-center p-3 rounded-lg ${ride.pet_allowed ? 'bg-green-900/20' : 'bg-red-900/10'}`}>
+                                <div className={`flex items-center p-3 rounded-lg ${ride.pet_allowed ? 'bg-green-900/20' : ''}`}>
                                     {ride.pet_allowed ?
                                         <Check size={18} className="text-green-400 mr-3" /> :
                                         <X size={18} className="text-red-400 mr-3" />
@@ -169,7 +195,7 @@ export default function RideDetails() {
                                     <span className="text-gray-200">Pets</span>
                                 </div>
 
-                                <div className={`flex items-center p-3 rounded-lg ${ride.music_allowed ? 'bg-green-900/20' : 'bg-red-900/10'}`}>
+                                <div className={`flex items-center p-3 rounded-lg ${ride.music_allowed ? 'bg-green-900/20' : ''}`}>
                                     {ride.music_allowed ?
                                         <Check size={18} className="text-green-400 mr-3" /> :
                                         <X size={18} className="text-red-400 mr-3" />
@@ -178,7 +204,7 @@ export default function RideDetails() {
                                     <span className="text-gray-200">Music</span>
                                 </div>
 
-                                <div className={`flex items-center p-3 rounded-lg ${ride.conversation_allowed ? 'bg-green-900/20' : 'bg-red-900/10'}`}>
+                                <div className={`flex items-center p-3 rounded-lg ${ride.conversation_allowed ? 'bg-green-900/20' : ''}`}>
                                     {ride.conversation_allowed ?
                                         <Check size={18} className="text-green-400 mr-3" /> :
                                         <X size={18} className="text-red-400 mr-3" />
@@ -187,7 +213,7 @@ export default function RideDetails() {
                                     <span className="text-gray-200">Conversation</span>
                                 </div>
 
-                                <div className={`flex items-center p-3 rounded-lg ${ride.food_allowed ? 'bg-green-900/20' : 'bg-red-900/10'}`}>
+                                <div className={`flex items-center p-3 rounded-lg ${ride.food_allowed ? 'bg-green-900/20' : ''}`}>
                                     {ride.food_allowed ?
                                         <Check size={18} className="text-green-400 mr-3" /> :
                                         <X size={18} className="text-red-400 mr-3" />
@@ -196,6 +222,94 @@ export default function RideDetails() {
                                     <span className="text-gray-200">Food</span>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* pending reservations */}
+                        <div className="mb-8 px-6">
+                            <h3 className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Requests</h3>
+                            {pendingResevations && pendingResevations.length > 0 ? (
+                                <ul className="space-y-4">
+                                    {pendingResevations.map((reservation) => (
+                                        <li key={reservation.id} className="bg-slate-700 p-4 rounded-lg">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <div className="flex items-center gap-4">
+                                                    <img
+                                                        src={reservation.user?.picture ? `http://127.0.0.1:8000/storage/${reservation.user.picture}` : '/images/default-avatar.png'}
+                                                        alt={reservation.user?.name}
+                                                        className="w-10 h-10 rounded-full object-cover border border-cyan-500" />
+                                                    <div>
+                                                        <p className="text-white font-semibold">{reservation.user?.name}</p>
+                                                        <p className="text-sm text-gray-400">Reserved at {new Date(reservation.created_at).toLocaleString()}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-end gap-3 mt-2">
+                                                <button
+                                                    onClick={() => handleReservationAction(reservation.id, 'accepted')}
+                                                    disabled={ride.status !== 'available'}
+                                                    className={`px-4 py-2 rounded-lg text-white ${ride.status !== 'available' ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+                                                        }`}>
+                                                    Accept
+                                                </button>
+
+                                                <button
+                                                    onClick={() => handleReservationAction(reservation.id, 'rejected')}
+                                                    disabled={ride.status !== 'available'}
+                                                    className={`px-4 py-2 rounded-lg text-white ${ride.status !== 'available' ? 'bg-gray-500 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'
+                                                        }`}>
+                                                    Reject
+                                                </button>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p className="text-gray-400">No reservations yet for this ride.</p>
+                            )}
+                        </div>
+
+                        {/* acpted reservations */}
+                        <div className="mb-8 px-6">
+                            <h3 className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Reservations</h3>
+                            {acceptedResevations && acceptedResevations.length > 0 ? (
+                                <ul className="space-y-4">
+                                    {acceptedResevations.map((reservation) => (
+                                        <li key={reservation.id} className="bg-slate-700 p-4 rounded-lg">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <div className="flex items-center gap-4">
+                                                    <img
+                                                        src={reservation.user?.picture ? `http://127.0.0.1:8000/storage/${reservation.user.picture}` : '/images/default-avatar.png'}
+                                                        alt={reservation.user?.name}
+                                                        className="w-10 h-10 rounded-full object-cover border border-cyan-500" />
+                                                    <div>
+                                                        <p className="text-white font-semibold">{reservation.user?.name}</p>
+                                                        <p className="text-sm text-gray-400">Reserved at {new Date(reservation.created_at).toLocaleString()}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-end gap-3 mt-2">
+                                                <button
+                                                    onClick={() => handleReservationAction(reservation.id, 'accepted')}
+                                                    disabled={ride.status !== 'available'}
+                                                    className={`px-4 py-2 rounded-lg text-white ${ride.status !== 'available' ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+                                                        }`}>
+                                                    Accept
+                                                </button>
+
+                                                <button
+                                                    onClick={() => handleReservationAction(reservation.id, 'rejected')}
+                                                    disabled={ride.status !== 'available'}
+                                                    className={`px-4 py-2 rounded-lg text-white ${ride.status !== 'available' ? 'bg-gray-500 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'
+                                                        }`}>
+                                                    Reject
+                                                </button>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p className="text-gray-400">No reservations yet for this ride.</p>
+                            )}
                         </div>
                     </div>
 
@@ -206,7 +320,7 @@ export default function RideDetails() {
                             className="text-gray-400 hover:text-white transition-colors">
                             Back to rides
                         </Link>
-                        {(user?.id !== ride.user_id) && (
+                        {(user?.id !== ride.user_id && ride.status === 'available') && (
                             <button
                                 onClick={() => handleReserve(ride.id)}
                                 to={`/reserve/${ride.id}`}

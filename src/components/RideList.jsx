@@ -136,7 +136,7 @@ const RideList = ({ rides, fetchRides, hasMoreRides, isLoading }) => {
             ) : (
                 <div className="bg-zinc-800 rounded-lg p-8 text-center">
                     <p className="text-gray-400">
-                        {isLoading ? 'Searching for rides...' : 'No rides found. Try a different search!'}
+                        {isLoading ? 'Searching for rides...' : 'No rides found.!'}
                     </p>
                 </div>
             )}

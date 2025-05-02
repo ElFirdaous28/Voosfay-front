@@ -33,7 +33,6 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
     return (
         <>
-            {/* Overlay for mobile */}
             {isOpen && (
                 <div
                     className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
@@ -64,9 +63,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                             <MenuLink to="/offer-ride" icon={Car} text="Offer a Ride" />
                             <MenuLink to="/offered-rides" icon={CarFront} text="Offered Rides" />
                             <MenuLink to="/joined-rides" icon={Users} text="Joined Rides" />
-                            <MenuLink to="/ratings" icon={Star} text="Ratings & Reviews" />
-                            <MenuLink to="/payments" icon={CreditCard} text="Payments" />
-                            <MenuLink to="/reports" icon={Flag} text="Reports" />
+                            <MenuLink to={`/profile/ratings/${user?.id}`} icon={Star} text="Ratings & Reviews" />
+                            {/* <MenuLink to="/payments" icon={CreditCard} text="Payments" /> */}
+                            {/* <MenuLink to="/reports" icon={Flag} text="Reports" /> */}
                         </div>)}
 
                         {/* Admin section - flattened without dropdown */}
@@ -83,7 +82,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                         )}
                     </div>
 
-                    <div className="mt-8 pt-4 border-t border-gray-700">
+                    <div className="mt-10 pt-4 border-t border-gray-700">
                         <button
                             onClick={logout}
                             className="flex items-center w-full py-3 px-4 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors duration-200">
