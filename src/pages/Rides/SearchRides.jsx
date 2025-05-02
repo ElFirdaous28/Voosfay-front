@@ -12,6 +12,8 @@ export default function SearchRides() {
     const [sortBy, setSortBy] = useState('price_asc');
 
     const [filters, setFilters] = useState({
+        female: false,
+        male: false,
         pet_allowed: false,
         luggage_allowed: false,
         conversation_allowed: false,
@@ -48,8 +50,9 @@ export default function SearchRides() {
             };
 
             const response = await api.get('v1/search/rides', { params });
-
             const newRides = response.data.rides || [];
+            console.log( response.data.rides);
+            
 
             setRides(prevRides => reset ? newRides : [...prevRides, ...newRides]);
             setOffset(currentOffset + newRides.length);
@@ -176,6 +179,8 @@ export default function SearchRides() {
                             <h3 className="text-sm font-medium mb-2 text-green-500">Requirements</h3>
                             <div className="space-y-2">
                                 {[
+                                    { label: "Female Driver Only", key: "female" },
+                                    { label: "Male Driver Only", key: "male" },
                                     { label: "Pet-Friendly", key: "pet_allowed" },
                                     { label: "Luggage Space", key: "luggage_allowed" },
                                     { label: "Conversation Allowed", key: "conversation_allowed" },
