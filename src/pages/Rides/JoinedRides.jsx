@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import Layout from '../Layout';
 import RideList from '../../components/RideList';
 import api from '../../Services/api';
 
-export default function OfferRides() {
+export default function JoinedRides() {
     const [rides, setRides] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [offset, setOffset] = useState(0);
@@ -16,11 +16,12 @@ export default function OfferRides() {
             setIsLoading(true);
             const currentOffset = offset;
 
-            const response = await api.get('v1/user/rides/offered', {
+            const response = await api.get('v1/user/rides/joined', {
                 params: {
                     offset: currentOffset
                 }
             });
+            console.log(response.data.rides);
             
             const newRides = response.data.rides || [];
 

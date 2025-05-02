@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../Layout'
-import { AwardIcon, Star, StarHalf } from 'lucide-react';
-import ProfileTabs from '../../components/profileTabs';
+import { Star } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import api from '../../Services/api';
 import Spinner from '../../components/Spinner';
@@ -66,42 +65,38 @@ export default function ProfileRatings() {
 
     return (
         <Layout>
-            <ProfileTabs />
             {/* profile section */}
-            <div className="bg-zinc-800 text-gray-100 p-8 rounded-lg mb-4">
-                <div className="flex items-center gap-4">
-                    <div className="mr-4">
-                        <div className="w-16 h-16 bg-gray-300 rounded-full overflow-hidden">
-                            <img
-                                src={profile?.user.picture ? `http://127.0.0.1:8000/storage/${profile.user.picture}` : "/images/default-avatar.png"}
-                                alt="User Avatar"
-                                className="w-full h-full object-cover rounded-full" />
-                        </div>
+            <div className="bg-zinc-800 text-gray-100 p-4 sm:p-6 md:p-8 rounded-lg mb-4">
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                    <div className="w-16 h-16 bg-gray-300 rounded-full overflow-hidden">
+                        <img
+                            src={profile?.user.picture ? `http://127.0.0.1:8000/storage/${profile.user.picture}` : "/images/default-avatar.png"}
+                            alt="User Avatar"
+                            className="w-full h-full object-cover rounded-full" />
                     </div>
-                    <div className="flex flex-col">
-                        <div className="flex-1">
-                            <h2 className="text-lg font-bold">{profile?.user.name}</h2>
-                            <p className="text-sm text-gray-300">{profile?.user.bio}</p>
-                        </div>
 
-                        <div className="flex mt-1 text-xs text-gray-500 gap-4">
+                    <div className="flex-1 text-center sm:text-left">
+                        <h2 className="text-lg font-bold">{profile?.user.name}</h2>
+                        <p className="text-sm text-gray-300">{profile?.user.bio}</p>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-center sm:justify-start gap-2 mt-2 text-xs text-gray-500">
                             <p>{profile?.user.email}</p>
                             <p>{profile?.user.phone}</p>
                         </div>
                     </div>
-                    <div className="flex items-center">
-                        <div className="flex flex-col items-center mx-2">
-                            <div className="flex items-center justify-center">
+
+                    <div className="flex flex-wrap justify-center sm:justify-end gap-4">
+                        <div className="flex flex-col items-center">
+                            <div className="flex items-center">
                                 <span className="font-bold mr-1">{profile?.rating_average}</span>
                                 <Star size={14} fill="gold" color="gold" />
                             </div>
                             <span className="text-xs text-gray-300">Average Rating</span>
                         </div>
-                        <div className="flex flex-col items-center mx-2">
+                        <div className="flex flex-col items-center">
                             <span className="font-bold">{profile?.offerd_rides_number}</span>
                             <span className="text-xs text-gray-300">Offered</span>
                         </div>
-                        <div className="flex flex-col items-center mx-2">
+                        <div className="flex flex-col items-center">
                             <span className="font-bold">{profile?.join_rides_number}</span>
                             <span className="text-xs text-gray-300">Joined</span>
                         </div>
@@ -109,9 +104,11 @@ export default function ProfileRatings() {
                 </div>
             </div>
 
-            <div className='bg-zinc-800 text-gray-100 rounded-lg p-8'>
-                <div className="flex">
-                    <div className="w-2/5 p-4 bg-gray-800 rounded-lg">
+            {/* ratings and reviews */}
+            <div className='bg-zinc-800 text-gray-100 rounded-lg p-4 sm:p-6 md:p-8'>
+                <div className="flex flex-col md:flex-row gap-4">
+                    {/* ratings summary */}
+                    <div className="w-full md:w-2/5 p-4 bg-gray-800 rounded-lg">
                         <div className="mb-6">
                             <div className="text-2xl font-bold text-center">{reviews?.rating_average}</div>
                             <div className="flex justify-center mb-1">
@@ -155,13 +152,14 @@ export default function ProfileRatings() {
                         </div>
                     </div>
 
-                    <div className="w-3/5 pl-4">
-                        <div className="max-h-96 overflow-y-auto pr-2 scrollbar-hidden">
+                    {/* reviews list */}
+                    <div className="w-full md:w-3/5 md:pl-4">
+                        <div className="max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-600">
                             {reviews?.reviews.slice(0, visibleReviews).map((review) => (
                                 <div key={review.id} className="bg-gray-800 p-4 rounded-lg mb-4">
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center">
-                                            <div className="w-8 h-8 bg-gray-300 rounded-full mr-2">
+                                            <div className="w-8 h-8 bg-gray-300 rounded-full mr-2 overflow-hidden">
                                                 <img
                                                     src={review.reviewer?.picture ? `http://127.0.0.1:8000/storage/${review.reviewer.picture}` : '/images/default-avatar.png'}
                                                     alt="User Avatar"
@@ -189,7 +187,6 @@ export default function ProfileRatings() {
                                             ? review.comment
                                             : truncateText(review.comment)}
 
-                                        {/* Show more/less toggle only if text is long enough */}
                                         {review.comment && review.comment.length > 150 && (
                                             <span
                                                 className="text-green-400 ml-1 cursor-pointer"
@@ -203,7 +200,7 @@ export default function ProfileRatings() {
                             ))}
                         </div>
 
-                        {/* Load more button - only show if there are more reviews to load */}
+                        {/* Load more button */}
                         {reviews?.reviews && visibleReviews < reviews.reviews.length && (
                             <div className="text-center mt-4">
                                 <button

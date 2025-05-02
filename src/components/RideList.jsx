@@ -5,10 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 
 const RideList = ({ rides, fetchRides, hasMoreRides, isLoading }) => {
-    console.log(rides);
-
     const { user } = useAuth();
-
     const handleDelete = async (id) => {
         try {
             await api.delete(`v1/rides/${id}`);

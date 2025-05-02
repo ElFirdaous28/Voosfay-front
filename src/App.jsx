@@ -19,6 +19,7 @@ import AddAdmin from './pages/Admin/AddAdmin'
 import ReportsManagement from './pages/Admin/ReportsManagment'
 import ReportDetails from './pages/Admin/ReportDetails'
 import OfferRides from './pages/Rides/OfferRides'
+import JoinedRides from './pages/Rides/JoinedRides'
 
 function App() {
 
@@ -51,10 +52,11 @@ function App() {
 
         {/* user routes */}
         <Route element={<PrivateRoute role={["user"]} />}>
+          <Route path='offer-ride' element={<AddRide />} />
+          <Route path='edit-ride/:id' element={<EditRide />} />
           <Route path='/search-rides' element={<SearchRides />} />
           <Route path='offered-rides' element={<OfferRides />} />
-        <Route path='offer-ride' element={<AddRide />} />
-        <Route path='edit-ride/:id' element={<EditRide />} />
+          <Route path='joined-rides' element={<JoinedRides />} />
         </Route>
 
       </Routes>
