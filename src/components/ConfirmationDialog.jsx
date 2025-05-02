@@ -11,8 +11,6 @@ export default function ConfirmationDialog({
     isOpen = false,
     actionType = "warning",
     customIcon = null,
-    suspendDuration,
-    setSuspendDuration
 }) {
 
     if (!isOpen) return null;
@@ -40,6 +38,13 @@ export default function ConfirmationDialog({
             buttonBg: "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400"
         },
         suspend: {
+            bg: "bg-yellow-500/10",
+            border: "border-yellow-500/30",
+            iconBg: "bg-yellow-500/20",
+            iconColor: "text-yellow-400",
+            buttonBg: "bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400"
+        },
+        warn: {
             bg: "bg-yellow-500/10",
             border: "border-yellow-500/30",
             iconBg: "bg-yellow-500/20",
@@ -78,11 +83,7 @@ export default function ConfirmationDialog({
     };
 
     const handleConfirm = () => {
-        if (actionType === 'suspended') {
-            onConfirm(suspendDuration);
-        } else {
-            onConfirm();
-        }
+        onConfirm();
     };
 
     return (
@@ -99,22 +100,6 @@ export default function ConfirmationDialog({
                     <div className="p-5 pt-2 pb-4">
                         <p className="text-gray-300">{message}</p>
                     </div>
-                    {actionType === 'suspend' && (
-                        <div className="px-5 pb-4">
-                            <label className="block text-sm font-medium text-white mb-1">Suspend Duration</label>
-                            <select
-                                name="suspend_duration"
-                                value={suspendDuration}
-                                onChange={(e) => setSuspendDuration(parseInt(e.target.value))}
-                                className="w-full px-3 py-2 bg-zinc-800 text-white rounded-lg border border-zinc-600 focus:outline-none focus:ring-2 focus:ring-amber-500">
-                                <option value={1}>1 Day</option>
-                                <option value={3}>3 Days</option>
-                                <option value={7}>1 Week</option>
-                                <option value={30}>1 Month</option>
-                                <option value={9999}>Forever</option>
-                            </select>
-                        </div>
-                    )}
 
                     <div className="flex justify-end gap-3 p-4 pt-0">
                         <button

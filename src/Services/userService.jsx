@@ -33,5 +33,25 @@ export const userService = {
             return false;
         }
     },
-
+    warn: async (userId) => {
+        try {
+            await api.post(`v1/admin/users/${userId}/warn`)
+            return true;
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            return false;
+        }
+    },
+    resolveReport: async (reportId) => {
+        try {
+            await api.post(`v1/reports/${reportId}/status`, {
+                _method: 'PATCH',
+                'status': 'resolved'
+            })
+            return true;
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            return false;
+        }
+    },
 };

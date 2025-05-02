@@ -16,6 +16,8 @@ import NotificationProvider from './components/NotificationProvider'
 import EditRide from './pages/Rides/EditRide'
 import UserManagement from './pages/Admin/UserManagement'
 import AddAdmin from './pages/Admin/AddAdmin'
+import ReportsManagement from './pages/Admin/ReportsManagment'
+import ReportDetails from './pages/Admin/ReportDetails'
 
 function App() {
 
@@ -43,6 +45,8 @@ function App() {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='admin/users' element={<UserManagement />} />
           <Route path='admin/add-admin' element={<AddAdmin />} />
+          <Route path='admin/reports' element={<ReportsManagement />} />
+          <Route path='admin/reports/:id' element={<ReportDetails />} />
 
         </Route>
 
