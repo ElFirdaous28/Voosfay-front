@@ -13,6 +13,7 @@ export default function UserManagement() {
     const [users, setUsers] = useState([]);
     const { openDialog } = useConfirmation();
     const [searchTerm, setSearchTerm] = useState('');
+    const [roleFilter, setRoleFilter] = useState('');
     const [loading, setLoading] = useState(true);
     const [suspendDuration, setSuspendDuration] = useState(1);
     const [activeDropdownId, setActiveDropdownId] = useState(null);
@@ -25,7 +26,7 @@ export default function UserManagement() {
                 setActiveDropdownId(null);
             }
         }
-        
+
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
@@ -36,19 +37,23 @@ export default function UserManagement() {
 
     const fetchUsers = async () => {
         try {
-            const response = await api.get('v1/admin/users');
+            const response = await api.get('v1/admin/users', {
+                params: {
+                    role: roleFilter,
+                    search: searchTerm
+                }
+            });
+
             setUsers(response.data.users);
             setLoading(false);
         } catch (error) {
             console.log("error fetching users", error);
-            toast.error('Failed to fetch users');
-            setLoading(false);
         }
     };
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [searchTerm, roleFilter]);
 
     const handleDelete = (userId) => {
         openDialog({
@@ -102,19 +107,19 @@ export default function UserManagement() {
         setSuspendDuration(duration);
         setActiveDropdownId(null);
         console.log(duration);
-        
-        
+
+
         openDialog({
             title: 'Suspend user',
             message: `Are you sure you want to suspend this user for ${duration} ${duration === '1' ? 'day' : 'days'}?`,
             actionType: 'suspend',
             confirmText: 'Suspend'
         }, async () => {
-            const success = await userService.changeStatus(userId, { 
-                'status': 'suspended', 
-                'suspend_duration': parseInt(duration) 
+            const success = await userService.changeStatus(userId, {
+                'status': 'suspended',
+                'suspend_duration': parseInt(duration)
             });
-            
+
             if (success) {
                 toast.success('User suspended');
                 fetchUsers();
@@ -156,6 +161,14 @@ export default function UserManagement() {
                             <Search className="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500" size={18} />
                         </div>
                     </div>
+                    <select
+                        className="ml-4 px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                        value={roleFilter}
+                        onChange={(e) => setRoleFilter(e.target.value)}>
+                        <option value="">All Roles</option>
+                        <option value="admin">Admin</option>
+                        <option value="user">Passenger</option>
+                    </select>
                 </div>
 
                 {/* users table */}
@@ -239,23 +252,23 @@ export default function UserManagement() {
                                                             <div className="py-1 px-3 text-xs text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                                                                 Suspend duration
                                                             </div>
-                                                            <button onClick={() => handleSuspend(user.id, '1')} 
+                                                            <button onClick={() => handleSuspend(user.id, '1')}
                                                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                                 1 Day
                                                             </button>
-                                                            <button onClick={() => handleSuspend(user.id, '3')} 
+                                                            <button onClick={() => handleSuspend(user.id, '3')}
                                                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                                 3 Days
                                                             </button>
-                                                            <button onClick={() => handleSuspend(user.id, '7')} 
+                                                            <button onClick={() => handleSuspend(user.id, '7')}
                                                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                                 1 Week
                                                             </button>
-                                                            <button onClick={() => handleSuspend(user.id, '30')} 
+                                                            <button onClick={() => handleSuspend(user.id, '30')}
                                                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                                 1 Month
                                                             </button>
-                                                            <button onClick={() => handleSuspend(user.id, '60')} 
+                                                            <button onClick={() => handleSuspend(user.id, '60')}
                                                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                                 2 Months
                                                             </button>
@@ -283,7 +296,7 @@ export default function UserManagement() {
                                     </td>
                                 </tr>
                             ))}
-                            
+
                             {users.length === 0 && (
                                 <tr>
                                     <td colSpan="5" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">

@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../Layout';
-import { Search} from 'lucide-react';
+import { Search } from 'lucide-react';
 import api from '../../Services/api';
 import { Link } from 'react-router-dom';
+import Spinner from '../../components/Spinner';
 
 export default function ReportsManagement() {
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statutFilter, setStatutFilter] = useState('');
 
     const fetchReports = async () => {
         try {
-            const response = await api.get('v1/reports');
+            const response = await api.get('v1/reports', {
+                params: {
+                    search: searchTerm,
+                    status: statutFilter
+                }
+            });
             console.log(response.data.reports);
             setReports(response.data.reports);
             setLoading(false);
@@ -20,11 +28,8 @@ export default function ReportsManagement() {
     }
     useEffect(() => {
         fetchReports();
-    }, [])
+    }, [searchTerm, statutFilter])
 
-    const [searchTerm, setSearchTerm] = useState('');
-
-    // Get status badge color
     const getStatusBadgeColor = (status) => {
         switch (status) {
             case 'pending':
@@ -41,6 +46,9 @@ export default function ReportsManagement() {
                 return 'bg-gray-100 text-gray-800';
         }
     };
+
+    if (loading) return (<Layout><Spinner /></Layout>);
+
     return (
         <Layout title="Report Management">
             <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
@@ -52,13 +60,21 @@ export default function ReportsManagement() {
                         <div className="relative w-full sm:w-64">
                             <input
                                 type="text"
-                                placeholder="Search by user..."
+                                placeholder="Search by users..."
                                 className="pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)} />
                             <Search className="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500" size={18} />
                         </div>
                     </div>
+                    <select
+                        className="ml-4 px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                        value={statutFilter}
+                        onChange={(e) => setStatutFilter(e.target.value)}>
+                        <option value="">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
                 </div>
 
                 {/* Reports Table */}
