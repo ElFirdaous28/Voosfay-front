@@ -21,9 +21,11 @@ export default function RideDetails() {
     const [showRatingPopup, setShowRatingPopup] = useState(false);
     const [selectedRide, setSelectedRide] = useState(null);
     const [selectedReservationId, setSelectedReservationId] = useState(null);
+    const [reportedUserId, setReportedUserId] = useState(null);
 
-    const handleReportPopup = (ride) => {
+    const handleReportPopup = (ride, reportedUserId) => {
         setSelectedRide(ride);
+        setReportedUserId(reportedUserId)
         setShowReportPopup(true);
     };
 
@@ -345,22 +347,24 @@ export default function RideDetails() {
                                                         </button>
                                                     </div>
                                                 )}
+                                                {/* rating and report */}
+                                                <div className="flex gap-2 mt-2">
+                                                    {(ride.status === 'completed' && (user?.id === ride?.user_id || user?.id === reservation.user.id)) && (
+                                                        <>
+                                                            <button
+                                                                onClick={() => handleRatingPopup(ride, reservation.id)}
+                                                                className="px-4 py-2 rounded-lg text-white bg-yellow-600 hover:bg-yellow-700">
+                                                                {user?.id === reservation.user.id ? 'Rate Owner' : 'Rate Passenger'}
+                                                            </button>
 
-                                                {(ride.status === 'completed' && reservation.user.id !== user.id && user?.id === ride?.user_id) && (
-                                                    <div className="flex gap-2 mt-2">
-                                                        <button
-                                                            onClick={() => handleRatingPopup(ride, reservation.id)}
-                                                            className="px-4 py-2 rounded-lg text-white bg-yellow-600 hover:bg-yellow-700">
-                                                            Rate
-                                                        </button>
-
-                                                        <button
-                                                            onClick={() => setShowReportPopup(true)}
-                                                            className="px-4 py-2 rounded-lg text-white bg-red-700 hover:bg-red-800">
-                                                            Report
-                                                        </button>
-                                                    </div>
-                                                )}
+                                                            <button
+                                                                onClick={() => handleReportPopup(ride, reservation.user.id)}
+                                                                className="px-4 py-2 rounded-lg text-white bg-red-700 hover:bg-red-800">
+                                                                {user?.id === reservation.user.id ? 'Report Owner' : 'Report Passenger'}
+                                                            </button>
+                                                        </>
+                                                    )}
+                                                </div>
                                             </div>
                                         </li>
                                     ))}
@@ -391,7 +395,7 @@ export default function RideDetails() {
             </div>
 
             {/* popups */}
-            <ReportPopup show={showReportPopup} onClose={closePopups} ride={selectedRide} />
+            <ReportPopup show={showReportPopup} onClose={closePopups} ride={selectedRide} reportedUserId={reportedUserId} />
             <RatingPopup show={showRatingPopup} onClose={closePopups} ride={selectedRide} reservationId={selectedReservationId} />
 
         </Layout>

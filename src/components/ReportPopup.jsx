@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
+import api from '../Services/api';
+import { toast } from 'react-toastify';
 
-const ReportPopup = ({ show, onClose, ride }) => {
+const ReportPopup = ({ show, onClose, ride, reportedUserId }) => {
     const [report, setReport] = useState('');
 
     if (!show) return null;
 
-    const handleReportSubmit = () => {
-        console.log('Report submitted:', report);
+    const handleReportSubmit = async () => {
+        try {
+            const response = await api.post('v1/reports', {
+                reported_user_id: reportedUserId,
+                reason: report
+            })
+            toast.success('report submitted successfully');
+        } catch (error) {
+            console.log('Error while reserving', error);
+            toast.error(error);
+        }
         onClose();
     };
 
