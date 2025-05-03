@@ -20,6 +20,7 @@ import ReportsManagement from './pages/Admin/ReportsManagment'
 import ReportDetails from './pages/Admin/ReportDetails'
 import OfferRides from './pages/Rides/OfferRides'
 import JoinedRides from './pages/Rides/JoinedRides'
+import Wallet from './pages/Wallet'
 
 function App() {
 
@@ -57,6 +58,7 @@ function App() {
           <Route path='/search-rides' element={<SearchRides />} />
           <Route path='offered-rides' element={<OfferRides />} />
           <Route path='joined-rides' element={<JoinedRides />} />
+          <Route path='wallet' element={<Wallet />} />
         </Route>
 
       </Routes>
