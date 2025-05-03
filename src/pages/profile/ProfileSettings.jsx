@@ -180,6 +180,21 @@ export default function ProfileSettings() {
         }
     };
 
+    // delete account
+    const handleDeleteAccount = async () => {
+        if (!confirm("Are you sure you want to delete your account? This action is irreversible.")) {
+            return;
+        }
+
+        try {
+            await api.delete('v1/profile');
+            alert('Account deleted successfully.');
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Error deleting account:', error);
+            alert('Failed to delete account.');
+        }
+    };
 
     return (
         <Layout>
@@ -346,7 +361,7 @@ export default function ProfileSettings() {
 
             {/* Change Password Section */}
             <h2 className="text-sm font-medium text-gray-400 mb-2">Change my password</h2>
-            <form onSubmit={handlePasswordSubmit} className="bg-zinc-800 rounded-lg p-6">
+            <form onSubmit={handlePasswordSubmit} className="bg-zinc-800 rounded-lg p-6 mb-2">
                 <div className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-400 mb-1">Current Password</label>
@@ -394,6 +409,19 @@ export default function ProfileSettings() {
                     </button>
                 </div>
             </form>
+
+            {/* Account Deletion Section */}
+            <h2 className="text-sm font-medium text-gray-400 mb-2">Danger Zone</h2>
+
+            <div className="bg-zinc-800 rounded-lg p-6 mb-6">
+                <p className="text-gray-300 mb-4">Once you delete your account And if 30 days passed With no login, there is no going back. Please be certain.</p>
+                <button
+                    onClick={handleDeleteAccount}
+                    className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded">
+                    Delete My Account
+                </button>
+            </div>
+
         </Layout>
     );
 }
