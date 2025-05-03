@@ -6,6 +6,8 @@ import api from '../../Services/api';
 import Spinner from '../../components/Spinner';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
+import ReportPopup from '../../components/ReportPopup';
+import RatingPopup from '../../components/RatingPopup';
 
 export default function RideDetails() {
     const { user } = useAuth();
@@ -14,6 +16,30 @@ export default function RideDetails() {
     const [pendingResevations, setPendingResevations] = useState(null);
     const [acceptedResevations, setAcceptedResevations] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    const [showReportPopup, setShowReportPopup] = useState(false);
+    const [showRatingPopup, setShowRatingPopup] = useState(false);
+    const [selectedRide, setSelectedRide] = useState(null);
+    const [selectedReservationId, setSelectedReservationId] = useState(null);
+
+    const handleReportPopup = (ride) => {
+        setSelectedRide(ride);
+        setShowReportPopup(true);
+    };
+
+    const handleRatingPopup = (ride, reservationId) => {
+        setSelectedRide(ride);
+        setSelectedReservationId(reservationId)
+        setShowRatingPopup(true);
+    };
+
+    const closePopups = () => {
+        setShowReportPopup(false);
+        setShowRatingPopup(false);
+        setSelectedRide(null);
+        setSelectedReservationId(null);
+    };
+
     const fetchRide = async () => {
         try {
             const response = await api.get(`/v1/rides/${id}`);
@@ -243,23 +269,32 @@ export default function RideDetails() {
                                                     </div>
                                                 </div>
                                             </div>
+                                            {/* actions */}
                                             <div className="flex justify-end gap-3 mt-2">
-                                                <button
-                                                    onClick={() => handleReservationAction(reservation.id, 'accepted')}
-                                                    disabled={ride.status !== 'available'}
-                                                    className={`px-4 py-2 rounded-lg text-white ${ride.status !== 'available' ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
-                                                        }`}>
-                                                    Accept
-                                                </button>
 
-                                                <button
-                                                    onClick={() => handleReservationAction(reservation.id, 'rejected')}
-                                                    disabled={ride.status !== 'available'}
-                                                    className={`px-4 py-2 rounded-lg text-white ${ride.status !== 'available' ? 'bg-gray-500 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'
-                                                        }`}>
-                                                    Reject
-                                                </button>
+                                                {ride.status !== 'in_progress' && ride.status !== 'completed' && (
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={() => handleReservationAction(reservation.id, 'accepted')}
+                                                            className="px-4 py-2 rounded-lg text-white bg-green-600 hover:bg-green-700">
+                                                            Accept
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => handleReservationAction(reservation.id, 'rejected')}
+                                                            className="px-4 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700">
+                                                            Reject
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => handleReservationAction(reservation.id, 'cancelled')}
+                                                            className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </div>
+
                                         </li>
                                     ))}
                                 </ul>
@@ -287,22 +322,45 @@ export default function RideDetails() {
                                                     </div>
                                                 </div>
                                             </div>
+                                            {/* accepted reservations actions */}
                                             <div className="flex justify-end gap-3 mt-2">
-                                                <button
-                                                    onClick={() => handleReservationAction(reservation.id, 'accepted')}
-                                                    disabled={ride.status !== 'available'}
-                                                    className={`px-4 py-2 rounded-lg text-white ${ride.status !== 'available' ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
-                                                        }`}>
-                                                    Accept
-                                                </button>
+                                                {ride.status !== 'in_progress' && ride.status !== 'completed' && (
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={() => handleReservationAction(reservation.id, 'accepted')}
+                                                            className="px-4 py-2 rounded-lg text-white bg-green-600 hover:bg-green-700">
+                                                            Accept
+                                                        </button>
 
-                                                <button
-                                                    onClick={() => handleReservationAction(reservation.id, 'rejected')}
-                                                    disabled={ride.status !== 'available'}
-                                                    className={`px-4 py-2 rounded-lg text-white ${ride.status !== 'available' ? 'bg-gray-500 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'
-                                                        }`}>
-                                                    Reject
-                                                </button>
+                                                        <button
+                                                            onClick={() => handleReservationAction(reservation.id, 'rejected')}
+                                                            className="px-4 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700">
+                                                            Reject
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => handleReservationAction(reservation.id, 'completed')}
+                                                            className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
+                                                            Complete
+                                                        </button>
+                                                    </div>
+                                                )}
+
+                                                {(ride.status === 'completed' && reservation.user.id !== user.id && user?.id === ride?.user_id) && (
+                                                    <div className="flex gap-2 mt-2">
+                                                        <button
+                                                            onClick={() => handleRatingPopup(ride, reservation.id)}
+                                                            className="px-4 py-2 rounded-lg text-white bg-yellow-600 hover:bg-yellow-700">
+                                                            Rate
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => setShowReportPopup(true)}
+                                                            className="px-4 py-2 rounded-lg text-white bg-red-700 hover:bg-red-800">
+                                                            Report
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </div>
                                         </li>
                                     ))}
@@ -331,6 +389,11 @@ export default function RideDetails() {
                     </div>
                 </div>
             </div>
+
+            {/* popups */}
+            <ReportPopup show={showReportPopup} onClose={closePopups} ride={selectedRide} />
+            <RatingPopup show={showRatingPopup} onClose={closePopups} ride={selectedRide} reservationId={selectedReservationId} />
+
         </Layout>
     );
 }
