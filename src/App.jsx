@@ -58,9 +58,11 @@ function App() {
           <Route path='/search-rides' element={<SearchRides />} />
           <Route path='offered-rides' element={<OfferRides />} />
           <Route path='joined-rides' element={<JoinedRides />} />
-          <Route path='wallet' element={<Wallet />} />
         </Route>
 
+        <Route element={<PrivateRoute role={["user","super_admin"]}/>}>
+          <Route path='wallet' element={<Wallet />} />
+        </Route>
       </Routes>
     </>
   )

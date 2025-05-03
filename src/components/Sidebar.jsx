@@ -16,8 +16,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         return location.pathname === path;
     };
 
-    // Check if user is admin
-    const isAdmin = user?.role === "admin" || user?.role === "super_admin";
+    // Check if user is admin or super admin
+    const isAdmin = user?.role === "admin";
+    const isSuperAdmin = user?.role === "super_admin";
+    const isUser = user?.role === "user";  // Regular user check
 
     const MenuLink = ({ to, icon: Icon, text }) => (
         <Link
@@ -58,18 +60,20 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
                 <div className="py-4 px-3 overflow-y-auto h-[calc(100%-4rem)]">
                     <div className="space-y-1 mt-10">
-                        {!isAdmin && (<div className="border-gray-700 space-y-2">
-                            <MenuLink to="/search-rides" icon={Search} text="Search Rides" />
-                            <MenuLink to="/offer-ride" icon={Car} text="Offer a Ride" />
-                            <MenuLink to="/offered-rides" icon={CarFront} text="Offered Rides" />
-                            <MenuLink to="/joined-rides" icon={Users} text="Joined Rides" />
-                            <MenuLink to={`/profile/ratings/${user?.id}`} icon={Star} text="Ratings & Reviews" />
-                            {/* <MenuLink to="/payments" icon={CreditCard} text="Payments" /> */}
-                            {/* <MenuLink to="/reports" icon={Flag} text="Reports" /> */}
-                        </div>)}
+                        {/* Links for regular user */}
+                        {isUser && (
+                            <div className="border-gray-700 space-y-2">
+                                <MenuLink to="/search-rides" icon={Search} text="Search Rides" />
+                                <MenuLink to="/offer-ride" icon={Car} text="Offer a Ride" />
+                                <MenuLink to="/offered-rides" icon={CarFront} text="Offered Rides" />
+                                <MenuLink to="/joined-rides" icon={Users} text="Joined Rides" />
+                                <MenuLink to={`/profile/ratings/${user?.id}`} icon={Star} text="Ratings & Reviews" />
+                                <MenuLink to="/wallet" icon={CreditCard} text="Wallet" /> {/* Wallet link for users */}
+                            </div>
+                        )}
 
-                        {/* Admin section - flattened without dropdown */}
-                        {isAdmin && (
+                        {/* Links for super admin */}
+                        {(isAdmin || isSuperAdmin) && (
                             <div className="border-gray-700 space-y-2">
                                 <div className="space-y-1">
                                     <MenuLink to="/dashboard" icon={Home} text="Dashboard" />
@@ -77,6 +81,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                                     <MenuLink to="/admin/users" icon={Users} text="Users" />
                                     <MenuLink to="/admin/reports" icon={Flag} text="Reports" />
                                     <MenuLink to="/admin/payments" icon={CreditCard} text="Payments" />
+                                    <MenuLink to="/wallet" icon={CreditCard} text="Wallet" /> {/* Wallet link for super admins */}
                                 </div>
                             </div>
                         )}

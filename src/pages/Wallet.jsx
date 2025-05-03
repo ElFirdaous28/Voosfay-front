@@ -43,20 +43,6 @@ export default function Wallet() {
         getWallet();
     }, []);
 
-    const getTransactionColor = (type) => {
-        switch (type) {
-            case 'ride_payment':
-                return 'text-red-500';
-            case 'ride_income':
-                return 'text-green-500';
-            case 'platform_commission':
-                return 'text-blue-500';
-            default:
-                return 'text-gray-500';
-        }
-    };
-
-
     if (loading) return (
         <Layout>
             <Spinner />
@@ -102,8 +88,7 @@ export default function Wallet() {
                             {/* Submit Button */}
                             <button
                                 type="submit"
-                                className="w-full p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-                            >
+                                className="w-full p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
                                 Add Money
                             </button>
                         </div>
@@ -124,7 +109,12 @@ export default function Wallet() {
                                         <div className="font-semibold">{transaction.description}</div>
                                         <div className="text-sm text-gray-400">{new Date(transaction.created_at).toLocaleString()}</div>
                                     </div>
-                                    <div className={`text-sm font-semibold ${getTransactionColor(transaction.type)}`}>
+                                    <div
+                                        className={`text-sm font-semibold 
+                                            ${transaction.type === 'ride_payment' ? 'text-red-500' : ''}
+                                            ${transaction.type === 'ride_income' ? 'text-green-500' : ''}
+                                            ${transaction.type === 'platform_commission' ? 'text-blue-500' : ''}
+                                        `}>
                                         {transaction.amount < 0 ? `- ${Math.abs(transaction.amount)}` : `+ ${transaction.amount}`} USD
                                     </div>
                                 </div>
