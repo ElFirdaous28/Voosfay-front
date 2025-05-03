@@ -51,7 +51,7 @@ export default function SearchRides() {
 
             const response = await api.get('v1/search/rides', { params });
             const newRides = response.data.rides || [];
-            console.log( response.data.rides);
+            console.log( response);
             
 
             setRides(prevRides => reset ? newRides : [...prevRides, ...newRides]);

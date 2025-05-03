@@ -28,7 +28,7 @@ export default function Login() {
     }
   };
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-800">
+    <div className="flex items-center justify-center min-h-screen bg-zinc-800">
       <div className="flex w-full max-w-5xl shadow-lg rounded-lg overflow-hidden relative bg-cover bg-center max-h-[740px]"
         style={{ backgroundImage: "url('images/background1.jpg')" }}>
 
@@ -87,39 +87,39 @@ export default function Login() {
           </form>
 
           <div className="mt-4 text-center">
-          <p className="text-sm text-gray-400">
-            Don't have an account?{" "}
-            <Link to="/register" className="font-medium text-blue-500 hover:text-blue-400">
-              Sign up
-            </Link>
-          </p>
-        </div>
-
-        <div className="mt-6">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-700"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gray-800 text-gray-400">Or continue with</span>
-            </div>
+            <p className="text-sm text-gray-400">
+              Don't have an account?{" "}
+              <Link to="/register" className="font-medium text-blue-500 hover:text-blue-400">
+                Sign up
+              </Link>
+            </p>
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <div>
-              <button
-                className="w-full flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700">
-                Google
-              </button>
+          {/* <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-700"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-gray-800 text-gray-400">Or continue with</span>
+              </div>
             </div>
-            <div>
-              <button
-                className="w-full flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700">
-                GitHub
-              </button>
+
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <div>
+                <button
+                  className="w-full flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700">
+                  Google
+                </button>
+              </div>
+              <div>
+                <button
+                  className="w-full flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700">
+                  GitHub
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
+          </div> */}
         </div>
 
         <div className="hidden md:block w-1/2 relative z-10">
