@@ -91,7 +91,7 @@ export default function SearchRides() {
     };
 
     return (
-        <Layout>
+        <Layout title={"Search Rides"}>
             <div className="flex flex-col lg:flex-row gap-4 md:gap-6 p-4 md:p-8">
                 {/* search and filter */}
                 <div className="w-full lg:w-1/4 flex-shrink-0">

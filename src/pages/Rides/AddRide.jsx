@@ -52,7 +52,7 @@ export default function AddRide() {
 
 
     return (
-        <Layout>
+        <Layout title={"Add Ride"}>
             <div className="max-w-4xl mx-auto p-4">
                 <div className="bg-gradient-to-b from-zinc-800 to-zinc-900 rounded-xl shadow-xl overflow-hidden">
                     <div className="bg-green-700 p-6">

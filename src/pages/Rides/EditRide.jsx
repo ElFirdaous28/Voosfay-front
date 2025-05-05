@@ -128,11 +128,11 @@ export default function EditRide() {
     };
 
     if (isLoading) {
-        return (<Layout><Spinner /></Layout>);
+        return (<Layout title={"Edit Ride"}><Spinner /></Layout>);
     }
 
     return (
-        <Layout>
+        <Layout title={"Edit Ride"}>
             <div className="max-w-4xl mx-auto p-4">
                 <div className="bg-gradient-to-b from-zinc-800 to-zinc-900 rounded-xl shadow-xl overflow-hidden">
                     {/* Header */}

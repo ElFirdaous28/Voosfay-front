@@ -38,14 +38,14 @@ export default function Dashboard() {
 
     if (isLoading) {
         return (
-            <Layout>
+            <Layout title={"Dashboard"}>
                 <Spinner />
             </Layout>
         );
     }
 
     return (
-        <Layout>
+        <Layout title={"Dashboard"}>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
                 <div className="bg-zinc-800 rounded-xl p-5 shadow-lg border border-zinc-700">
                     <div className="flex justify-between items-start">

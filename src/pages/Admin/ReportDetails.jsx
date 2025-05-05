@@ -182,10 +182,10 @@ export default function ReportDetails() {
     );
   };
 
-  if (loading) return (<Layout><Spinner /></Layout>);
+  if (loading) return (<Layout title={"Report Details"}><Spinner /></Layout>);
 
   return (
-    <Layout>
+    <Layout title={"Report Details"}>
       {actionLoading && (
         <div className="flex justify-center items-center">
           <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />

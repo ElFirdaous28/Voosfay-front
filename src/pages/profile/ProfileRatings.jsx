@@ -60,11 +60,11 @@ export default function ProfileRatings() {
     };
 
     if (!profile) {
-        return (<Layout><Spinner /></Layout>)
+        return (<Layout title={"Profile"}><Spinner /></Layout>)
     }
 
     return (
-        <Layout>
+        <Layout title={"Profile"}>
             {/* profile section */}
             <div className="bg-zinc-800 text-gray-100 p-4 sm:p-6 md:p-8 rounded-lg mb-4">
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">

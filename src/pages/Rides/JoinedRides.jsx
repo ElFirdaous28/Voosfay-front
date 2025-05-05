@@ -47,7 +47,7 @@ export default function JoinedRides() {
     }, []);
 
     return (
-        <Layout>
+        <Layout title={"Joined Rides"}>
             {/* ride list */}
             <RideList
                 rides={rides}

@@ -38,7 +38,7 @@ export default function AddAdmin() {
     };
 
     return (
-        <Layout>
+        <Layout title={"Add Admin"}>
             <div className="max-w-2xl min-h-[80vh] mx-auto p-4 flex items-center">
                 <div className="w-full bg-gradient-to-b from-zinc-800 to-zinc-900 rounded-xl shadow-xl overflow-hidden">
                     <div className="bg-green-700 p-6">

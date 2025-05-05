@@ -189,7 +189,7 @@ export default function ProfileSettings() {
         try {
             await api.delete('v1/profile');
             alert('Account deleted successfully.');
-            window.location.href = '/';
+            window.location.href = '/login';
         } catch (error) {
             console.error('Error deleting account:', error);
             alert('Failed to delete account.');
@@ -197,7 +197,7 @@ export default function ProfileSettings() {
     };
 
     return (
-        <Layout>
+        <Layout title={"Profile Settings"}>
             {/* Personal Information Section */}
             <h2 className="text-sm font-medium text-gray-400 mb-2">Personal information</h2>
             <form onSubmit={handlePersonalInfoSubmit} className="bg-zinc-800 rounded-lg p-6 mb-6">

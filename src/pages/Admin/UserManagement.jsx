@@ -141,10 +141,10 @@ export default function UserManagement() {
         }
     };
 
-    if (loading) return (<Layout><Spinner /></Layout>);
+    if (loading) return (<Layout title={"Users Management"}><Spinner /></Layout>);
 
     return (
-        <Layout title="User Management">
+        <Layout title={"Users Management"}>
             <div className="bg-white dark:bg-zinc-800 shadow rounded-lg p-6">
                 <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
                     <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-0">

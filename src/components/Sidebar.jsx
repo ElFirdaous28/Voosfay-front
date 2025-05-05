@@ -44,12 +44,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             <aside
                 className={`fixed top-0 left-0 z-30 h-full w-64 bg-zinc-800 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
                     }`}>
-                <div className="flex items-center justify-between h-16 px-6 border-b border-gray-700">
-                    <div className="flex items-center">
-                        <div className="h-8 w-8 bg-cyan-500 rounded-md flex items-center justify-center">
-                            <Car size={20} className="text-white" />
-                        </div>
-                        <h2 className="ml-2 text-xl font-bold text-white">RideShare</h2>
+                <div className="relative flex items-center justify-between h-16 px-6 border-b border-gray-700">
+                    <div className="absolute left-1/2 transform -translate-x-1/2">
+                        <img className="h-full" src="/images/logo.png" alt="" />
                     </div>
                     <button
                         className="lg:hidden text-gray-400 hover:text-white"
@@ -80,8 +77,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                                     <MenuLink to="/admin/add-admin" icon={ShieldUser} text="Add Admin" />
                                     <MenuLink to="/admin/users" icon={Users} text="Users" />
                                     <MenuLink to="/admin/reports" icon={Flag} text="Reports" />
-                                    <MenuLink to="/admin/payments" icon={CreditCard} text="Payments" />
-                                    <MenuLink to="/wallet" icon={CreditCard} text="Wallet" /> {/* Wallet link for super admins */}
+                                    {/* <MenuLink to="/admin/payments" icon={CreditCard} text="Payments" /> */}
+                                    <MenuLink to="/wallet" icon={CreditCard} text="Wallet" />
                                 </div>
                             </div>
                         )}

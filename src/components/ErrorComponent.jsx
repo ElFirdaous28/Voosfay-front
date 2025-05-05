@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ErrorComponent({ errorType }) {
+    const navigate = useNavigate(); 
 
     let message = '';
     let image = '';
@@ -33,6 +35,12 @@ export default function ErrorComponent({ errorType }) {
             <img src={image} className="max-w-1/4" alt="Error" />
             <p className="text-2xl mb-4 font-bold">{errorCode}</p>
             <p className="text-xl font-semibold">{message}</p>
+
+            <button
+                onClick={() => navigate(-1)}
+                className="mt-6 py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                Go Back
+            </button>
         </div>
     );
 }

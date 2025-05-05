@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../Services/api';
 import Layout from './Layout';
 import Spinner from '../components/Spinner';
+import { useAuth } from '../context/AuthContext';
 
 export default function Wallet() {
     const [wallet, setWallet] = useState(null);
@@ -9,6 +10,8 @@ export default function Wallet() {
     const [amountToAdd, setAmountToAdd] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+
+    const { role } = useAuth();
 
     const getWallet = async () => {
         setIsLoading(true);
@@ -44,15 +47,14 @@ export default function Wallet() {
     }, []);
 
     if (loading) return (
-        <Layout>
+        <Layout title={"Wallet"}>
             <Spinner />
         </Layout>
     );
 
     return (
-        <Layout>
+        <Layout title={"Wallet"}>
             <div className="max-w-4xl mx-auto py-8">
-                {/* Wallet Info Section */}
                 <div className="bg-zinc-800 p-6 rounded-lg shadow-lg mb-6">
                     <h2 className="text-2xl text-white font-semibold mb-4">Wallet</h2>
                     <div className="flex justify-between items-center">
@@ -63,12 +65,10 @@ export default function Wallet() {
                     </div>
                 </div>
 
-                {/* Add Amount Section */}
-                <div className="bg-zinc-800 p-6 rounded-lg shadow-lg mb-6">
+                {role === 'user' && (<div className="bg-zinc-800 p-6 rounded-lg shadow-lg mb-6">
                     <h3 className="text-xl text-white font-semibold mb-4">Add Money to Wallet</h3>
                     <form onSubmit={handleAddAmount}>
                         <div className="space-y-4">
-                            {/* Amount Input */}
                             <div>
                                 <label htmlFor="amount" className="text-white">Amount to Add</label>
                                 <input
@@ -81,11 +81,8 @@ export default function Wallet() {
                                 />
                             </div>
 
-                            {/* Error or Success Message */}
                             {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                             {successMessage && <p className="text-green-500">{successMessage}</p>}
-
-                            {/* Submit Button */}
                             <button
                                 type="submit"
                                 className="w-full p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
@@ -94,6 +91,7 @@ export default function Wallet() {
                         </div>
                     </form>
                 </div>
+                )}
 
                 {/* Transactions List Section */}
                 <div className="bg-zinc-800 p-6 rounded-lg shadow-lg">

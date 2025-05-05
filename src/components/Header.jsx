@@ -1,7 +1,7 @@
 import { Menu, ChevronDown } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect, useRef } from "react";
-import NotificationDropdown from "./NotificationDropdown";
+// import NotificationDropdown from "./NotificationDropdown";
 import { Link } from "react-router-dom";
 
 export default function Header({ setIsSidebarOpen, title = "Dashboard" }) {
@@ -36,7 +36,7 @@ export default function Header({ setIsSidebarOpen, title = "Dashboard" }) {
             </div>
 
             <div className="flex items-center space-x-4">
-                <NotificationDropdown />
+                {/* <NotificationDropdown /> */}
 
                 <div className="relative" ref={userDropdownRef}>
                     <button

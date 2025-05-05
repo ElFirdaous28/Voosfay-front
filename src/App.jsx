@@ -33,6 +33,7 @@ function App() {
         <Route path='/login' element={<UnauthenticatedRoute element={<Login />} />} />
         <Route path='/register' element={<UnauthenticatedRoute element={<Register />} />} />
         <Route path='/505' element={<ErrorComponent />} />
+        <Route path='/unauthorized' element={<ErrorComponent errorType={'unauthorized'}/>} />
 
         {/* profile routes */}
         <Route path="/profile/ratings/:userId" element={<ProfileRatings />} />
@@ -60,7 +61,7 @@ function App() {
           <Route path='joined-rides' element={<JoinedRides />} />
         </Route>
 
-        <Route element={<PrivateRoute role={["user","super_admin"]}/>}>
+        <Route element={<PrivateRoute role={["user", "super_admin"]} />}>
           <Route path='wallet' element={<Wallet />} />
         </Route>
       </Routes>

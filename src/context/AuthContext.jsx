@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
         } else if (role === 'user') {
             navigate('/search-rides');
         } else {
-            navigate('/');
+            navigate('/login');
         }
     };
 

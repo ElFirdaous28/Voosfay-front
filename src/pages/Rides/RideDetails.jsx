@@ -107,11 +107,11 @@ export default function RideDetails() {
         }
     }
 
-    if (isLoading) return (<Layout><Spinner /></Layout>);
+    if (isLoading) return (<Layout title={"Ride Details"}><Spinner /></Layout>);
 
     if (!ride) {
         return (
-            <Layout>
+            <Layout title={"Ride Details"}>
                 <div className="max-w-4xl mx-auto p-6 text-center">
                     <div className="bg-zinc-800 rounded-lg shadow-lg p-8">
                         <h2 className="text-xl font-semibold text-red-400 mb-2">Ride Not Found</h2>
@@ -126,7 +126,7 @@ export default function RideDetails() {
     }
 
     return (
-        <Layout>
+        <Layout title={"Ride Details"}>
             <div className="max-w-4xl mx-auto p-4">
                 <div className="bg-gradient-to-b from-zinc-800 to-zinc-900 rounded-xl shadow-xl overflow-hidden">
 

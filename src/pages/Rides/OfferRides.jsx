@@ -46,7 +46,7 @@ export default function OfferRides() {
     }, []);
 
     return (
-        <Layout>
+        <Layout title={"Offered Rides"}>
             {/* ride list */}
             <RideList
                 rides={rides}
